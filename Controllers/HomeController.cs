@@ -27,9 +27,9 @@ namespace markdown_to_pdf.Controllers
         }
 
         [HttpPost]
-        public IActionResult GeneratePdf()
+        public IActionResult GeneratePdf(string? markdown)
         {
-            var markdown = System.IO.File.ReadAllText(_samplePath);
+            markdown ??= System.IO.File.ReadAllText(_samplePath);
             var processed = ReplaceTags(markdown);
             var html = Markdown.ToHtml(processed);
             using var ms = new MemoryStream();
