@@ -37,6 +37,7 @@ namespace markdown_to_pdf.Controllers
             using var writer = new PdfWriter(ms, writerProps);
             var props = new ConverterProperties().SetCreateAcroForm(true);
             HtmlConverter.ConvertToPdf(html, writer, props);
+
             return File(ms.ToArray(), "application/pdf", "sample.pdf");
         }
 
