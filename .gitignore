@@ -1,0 +1,24 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider/JetBrains
+.idea/
+
+# Logs, coverage, and temporary files
+*.log
+*.tsbuildinfo
+coverage/
+*.DS_Store
+
+# Packages
+packages/
+*.nupkg
