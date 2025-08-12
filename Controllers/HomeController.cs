@@ -32,7 +32,8 @@ namespace markdown_to_pdf.Controllers
             var processed = ReplaceTags(markdown);
             var html = Markdown.ToHtml(processed);
             using var ms = new MemoryStream();
-            HtmlConverter.ConvertToPdf(html, ms);
+            var props = new ConverterProperties().SetCreateAcroForm(true);
+            HtmlConverter.ConvertToPdf(html, ms, props);
             ms.Position = 0;
             return File(ms.ToArray(), "application/pdf", "sample.pdf");
         }
