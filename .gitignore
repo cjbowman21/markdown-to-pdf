@@ -22,3 +22,21 @@ coverage/
 # Packages
 packages/
 *.nupkg
+
+# Test results
+TestResults/
+
+# VS Code settings
+.vscode/
+
+# dotnet publish output
+published/
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
+# Miscellaneous
+*.swp
+*.tmp
