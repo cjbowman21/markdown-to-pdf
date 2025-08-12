@@ -33,8 +33,8 @@ namespace markdown_to_pdf.Controllers
             var processed = ReplaceTags(markdown);
             var html = Markdown.ToHtml(processed);
             using var ms = new MemoryStream();
-            var writerProps = new WriterProperties().SetCloseStream(false);
-            using var writer = new PdfWriter(ms, writerProps);
+            using var writer = new PdfWriter(ms);
+            writer.SetCloseStream(false);
             var props = new ConverterProperties().SetCreateAcroForm(true);
             HtmlConverter.ConvertToPdf(html, writer, props);
 
