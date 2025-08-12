@@ -5,6 +5,7 @@ using markdown_to_pdf.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using iText.Html2pdf;
+using iText.Kernel.Pdf;
 
 namespace markdown_to_pdf.Controllers
 {
@@ -32,9 +33,11 @@ namespace markdown_to_pdf.Controllers
             var processed = ReplaceTags(markdown);
             var html = Markdown.ToHtml(processed);
             using var ms = new MemoryStream();
+            var writerProps = new WriterProperties().SetCloseStream(false);
+            using var writer = new PdfWriter(ms, writerProps);
             var props = new ConverterProperties().SetCreateAcroForm(true);
-            HtmlConverter.ConvertToPdf(html, ms, props);
-            ms.Position = 0;
+            HtmlConverter.ConvertToPdf(html, writer, props);
+
             return File(ms.ToArray(), "application/pdf", "sample.pdf");
         }
 
