@@ -48,11 +48,11 @@ namespace markdown_to_pdf.Controllers
                 m => $"<input type=\"text\" name=\"{m.Groups["name"].Value}\" />");
 
             markdown = Regex.Replace(markdown,
-                @"<!--\s*\{\{check:(?<name>[^,}]+).*?\}\}\s*-->",
+                @"\[\]\s*<!--\s*\{\{check:(?<name>[^,}]+).*?\}\}\s*-->",
                 m => $"<input type=\"checkbox\" name=\"{m.Groups["name"].Value}\" />");
 
             markdown = Regex.Replace(markdown,
-                @"<!--\s*\{\{radio:(?<name>[^,}]+),group=(?<group>[^,}]+),value=(?<value>[^,}]+).*?\}\}\s*-->",
+                @"\(\)\s*<!--\s*\{\{radio:(?<name>[^,}]+),group=(?<group>[^,}]+),value=(?<value>[^,}]+).*?\}\}\s*-->",
                 m => $"<input type=\"radio\" name=\"{m.Groups["group"].Value}\" value=\"{m.Groups["value"].Value}\" />");
 
             return markdown;
