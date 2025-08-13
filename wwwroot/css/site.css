@@ -20,3 +20,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.no-wrap {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
+.highlight {
+  background-color: #fff3cd;
+}
