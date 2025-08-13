@@ -20,3 +20,46 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.no-wrap {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
+}
+
+.highlight {
+  background-color: #d4edda;
+}
+
+tr.highlight > td,
+tr.highlight > th {
+  background-color: #d4edda;
+}
+
+.line-block {
+  display: block;
+}
+
+#editorPane,
+#previewPane {
+  height: 80vh;
+}
+
+#markdownInput,
+#preview {
+  height: 100%;
+}
+
+#preview {
+  overflow-y: auto;
+}
+
+#editorPane form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#markdownInput {
+  flex: 1 1 auto;
+}
