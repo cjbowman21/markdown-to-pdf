@@ -31,6 +31,10 @@ body {
   background-color: #d4edda;
 }
 
+.line-block {
+  display: block;
+}
+
 #editorPane,
 #previewPane {
   height: 80vh;
