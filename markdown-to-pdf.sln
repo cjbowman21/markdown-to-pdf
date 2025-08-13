@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36221.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "markdown-to-pdf", "markdown-to-pdf.csproj", "{0453DAFC-CFE1-4FB4-94EB-E34E56D22B4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownToPdf.Tests", "MarkdownToPdf.Tests\MarkdownToPdf.Tests.csproj", "{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0453DAFC-CFE1-4FB4-94EB-E34E56D22B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0453DAFC-CFE1-4FB4-94EB-E34E56D22B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0453DAFC-CFE1-4FB4-94EB-E34E56D22B4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
