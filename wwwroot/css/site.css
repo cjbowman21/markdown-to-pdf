@@ -63,3 +63,14 @@ tr.highlight > th {
 #markdownInput {
   flex: 1 1 auto;
 }
+
+#preview input[type="text"] {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 2px 4px;
+}
+
+#preview input[type="checkbox"],
+#preview input[type="radio"] {
+  margin-right: 4px;
+}

@@ -21,6 +21,14 @@
         </form>
     </div>
     <div class="col-md-6 d-none d-md-block" id="previewPane">
+        <div class="d-flex justify-content-end mb-2">
+            <div class="btn-group btn-group-sm" role="group">
+                <input type="radio" class="btn-check" name="previewMode" id="htmlPreview" autocomplete="off" checked>
+                <label class="btn btn-outline-secondary" for="htmlPreview">HTML</label>
+                <input type="radio" class="btn-check" name="previewMode" id="pdfPreview" autocomplete="off">
+                <label class="btn btn-outline-secondary" for="pdfPreview">PDF</label>
+            </div>
+        </div>
         <div id="preview" class="border p-3 h-100"></div>
     </div>
 </div>
@@ -35,6 +43,8 @@
         const previewPane = document.getElementById('previewPane');
         const editorTab = document.getElementById('editor-tab');
         const previewTab = document.getElementById('preview-tab');
+        const htmlMode = document.getElementById('htmlPreview');
+        const pdfMode = document.getElementById('pdfPreview');
         let lines = [];
         let elementMap = new Map();
         let syncingFromInput = false;
@@ -56,9 +66,24 @@
         }
 
         function updatePreview() {
-            const cleaned = input.value.replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
-            lines = cleaned.split('\n');
-            preview.innerHTML = marked.parse(cleaned);
+            const raw = input.value;
+            let processed;
+
+            if (pdfMode.checked) {
+                processed = raw
+                    .replace(/_{2,}\s*<!--\s*\{\{text:([^,}]+).*?\}\}\s*-->/g, (m, name) => `<input type="text" name="${name}" />`)
+                    .replace(/\[\s+]\s*<!--\s*\{\{check:([^,}]+).*?\}\}\s*-->/g, (m, name) => `<input type="checkbox" name="${name}" />`)
+                    .replace(/\(\s+\)\s*<!--\s*\{\{radio:([^,}]+),group=([^,}]+),value=([^,}]+).*?\}\}\s*-->/g,
+                        (m, _name, group, value) => `<input type="radio" name="${group}" value="${value}" />`)
+                    .replace(/\s*<!--\s*\{\{\s*pagebreak\s*\}\}\s*-->\s*/gi,
+                        '\n<div style="page-break-after: always;"></div>\n')
+                    .replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
+            } else {
+                processed = raw.replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
+            }
+
+            lines = processed.split('\n');
+            preview.innerHTML = marked.parse(processed);
             splitParagraphLines();
             elementMap.clear();
             const elements = Array.from(
@@ -105,6 +130,8 @@
         previewTab.addEventListener('click', showPreview);
 
         input.addEventListener('input', updatePreview);
+        htmlMode.addEventListener('change', updatePreview);
+        pdfMode.addEventListener('change', updatePreview);
 
         input.addEventListener('scroll', () => {
             if (syncingFromPreview) {
