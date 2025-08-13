@@ -62,14 +62,18 @@
             splitParagraphLines();
             elementMap.clear();
             const elements = Array.from(
-                preview.querySelectorAll('li, p, pre, blockquote, h1, h2, h3, h4, h5, h6, .line-block')
+                preview.querySelectorAll('li, p, pre, blockquote, h1, h2, h3, h4, h5, h6, tr, .line-block')
             ).filter(el => el.tagName === 'LI' || !el.closest('li'));
             let index = 0;
             for (let i = 0; i < lines.length && index < elements.length; i++) {
-                const plain = lines[i]
+                const line = lines[i];
+                if (/^\s*\|?(?:\s*:?-+:?\s*\|)+\s*:?-+:?\s*\|?\s*$/.test(line)) {
+                    continue;
+                }
+                const plain = line
                     .replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '')
                     .replace(/\[(.*?)\]\(.*?\)/g, '$1')
-                    .replace(/[*_`#>\[\]-]/g, '')
+                    .replace(/[|*_`#>\[\]-]/g, '')
                     .replace(/\s+/g, ' ')
                     .trim();
                 if (plain) {
