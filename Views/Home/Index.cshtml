@@ -21,7 +21,7 @@
         </form>
     </div>
     <div class="col-md-6 d-none d-md-block" id="previewPane">
-        <div id="preview" class="border p-3 h-100 overflow-auto"></div>
+        <div id="preview" class="border p-3 h-100"></div>
     </div>
 </div>
 
@@ -30,6 +30,7 @@
     <script>
         const input = document.getElementById('markdownInput');
         const preview = document.getElementById('preview');
+        const previewScroll = preview;
         const editorPane = document.getElementById('editorPane');
         const previewPane = document.getElementById('previewPane');
         const editorTab = document.getElementById('editor-tab');
@@ -74,16 +75,16 @@
                 return;
             }
             syncingFromInput = true;
-            syncScroll(input, preview);
+            syncScroll(input, previewScroll);
         });
 
-        preview.addEventListener('scroll', () => {
+        previewScroll.addEventListener('scroll', () => {
             if (syncingFromInput) {
                 syncingFromInput = false;
                 return;
             }
             syncingFromPreview = true;
-            syncScroll(preview, input);
+            syncScroll(previewScroll, input);
         });
 
         function clearHighlight() {

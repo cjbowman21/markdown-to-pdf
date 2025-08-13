@@ -30,3 +30,17 @@ body {
 .highlight {
   background-color: #fff3cd;
 }
+
+#editorPane,
+#previewPane {
+  height: 80vh;
+}
+
+#markdownInput,
+#preview {
+  height: 100%;
+}
+
+#preview {
+  overflow-y: auto;
+}
