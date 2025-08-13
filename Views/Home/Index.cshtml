@@ -45,7 +45,9 @@
             lines = cleaned.split('\n');
             preview.innerHTML = marked.parse(cleaned);
             elementMap.clear();
-            const elements = preview.querySelectorAll('li, p, pre, blockquote, h1, h2, h3, h4, h5, h6');
+            const elements = Array.from(
+                preview.querySelectorAll('li, p, pre, blockquote, h1, h2, h3, h4, h5, h6')
+            ).filter(el => el.tagName === 'LI' || !el.closest('li'));
             let index = 0;
             for (let i = 0; i < lines.length && index < elements.length; i++) {
                 const plain = lines[i]
