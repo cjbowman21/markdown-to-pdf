@@ -58,6 +58,11 @@ namespace markdown_to_pdf.Controllers
                 @"\(\s+\)\s*<!--\s*\{\{radio:(?<name>[^,}]+),group=(?<group>[^,}]+),value=(?<value>[^,}]+).*?\}\}\s*-->",
                 m => $"<input type=\"radio\" name=\"{m.Groups["group"].Value}\" value=\"{m.Groups["value"].Value}\" />");
 
+            markdown = Regex.Replace(markdown,
+                @"\s*<!--\s*\{\{\s*pagebreak\s*\}\}\s*-->\s*",
+                "\n<div style=\"page-break-after: always;\"></div>\n",
+                RegexOptions.IgnoreCase);
+
             return markdown;
         }
 
