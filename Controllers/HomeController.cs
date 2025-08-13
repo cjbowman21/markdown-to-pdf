@@ -31,7 +31,10 @@ namespace markdown_to_pdf.Controllers
         {
             markdown ??= System.IO.File.ReadAllText(_samplePath);
             var processed = ReplaceTags(markdown);
-            var html = Markdown.ToHtml(processed);
+            var pipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .Build();
+            var html = Markdown.ToHtml(processed, pipeline);
             using var ms = new MemoryStream();
             using var writer = new PdfWriter(ms);
             writer.SetCloseStream(false);
