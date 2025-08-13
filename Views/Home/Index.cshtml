@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-md-6 d-md-block" id="editorPane">
         <form method="post" asp-action="GeneratePdf">
-            <textarea id="markdownInput" name="markdown" class="form-control no-wrap" rows="25" wrap="off">@Model</textarea>
+            <textarea id="markdownInput" name="markdown" class="form-control no-wrap" wrap="off">@Model</textarea>
             <button type="submit" class="btn btn-primary mt-3">Generate PDF</button>
         </form>
     </div>
@@ -36,6 +36,7 @@
         const editorTab = document.getElementById('editor-tab');
         const previewTab = document.getElementById('preview-tab');
         let lines = [];
+        let elementMap = new Map();
         let syncingFromInput = false;
         let syncingFromPreview = false;
 
@@ -43,6 +44,13 @@
             const cleaned = input.value.replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
             lines = cleaned.split('\n');
             preview.innerHTML = marked.parse(cleaned);
+            elementMap.clear();
+            preview.querySelectorAll('li, p, pre, blockquote, h1, h2, h3, h4, h5, h6').forEach(el => {
+                const key = el.textContent.replace(/\s+/g, ' ').trim();
+                if (key) {
+                    elementMap.set(key, el);
+                }
+            });
         }
 
         function showEditor() {
@@ -98,15 +106,13 @@
             const plain = text
                 .replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '')
                 .replace(/\[(.*?)\]\(.*?\)/g, '$1')
-                .replace(/[*_`#>\-\[\]]/g, '')
+                .replace(/[*_`#>\[\]-]/g, '')
+                .replace(/\s+/g, ' ')
                 .trim();
             if (!plain) return;
-            const walker = document.createTreeWalker(preview, NodeFilter.SHOW_TEXT, null);
-            while (walker.nextNode()) {
-                if (walker.currentNode.nodeValue.trim() === plain) {
-                    walker.currentNode.parentElement.classList.add('highlight');
-                    break;
-                }
+            const target = elementMap.get(plain);
+            if (target) {
+                target.classList.add('highlight');
             }
         }
 

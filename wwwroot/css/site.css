@@ -28,7 +28,7 @@ body {
 }
 
 .highlight {
-  background-color: #fff3cd;
+  background-color: #d4edda;
 }
 
 #editorPane,
@@ -43,4 +43,14 @@ body {
 
 #preview {
   overflow-y: auto;
+}
+
+#editorPane form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#markdownInput {
+  flex: 1 1 auto;
 }
