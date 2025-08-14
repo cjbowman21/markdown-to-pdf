@@ -1,15 +1,17 @@
+using System.IO;
 using System.Text.RegularExpressions;
 using Ganss.Xss;
 using Markdig;
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
+using System.Threading.Tasks;
 
 namespace markdown_to_pdf.Services;
 
 public interface IMarkdownService
 {
     string RenderHtml(string markdown, bool pdfMode);
-    byte[] GeneratePdf(string markdown);
+    Task GeneratePdf(string markdown, Stream outputStream);
 }
 
 public class MarkdownService : IMarkdownService
@@ -39,15 +41,14 @@ public class MarkdownService : IMarkdownService
         return Sanitizer.Sanitize(html);
     }
 
-    public byte[] GeneratePdf(string markdown)
+    public async Task GeneratePdf(string markdown, Stream outputStream)
     {
         var html = RenderHtml(markdown, true);
-        using var ms = new MemoryStream();
-        using var writer = new PdfWriter(ms);
+        using var writer = new PdfWriter(outputStream);
         writer.SetCloseStream(false);
         var props = new ConverterProperties().SetCreateAcroForm(true);
         HtmlConverter.ConvertToPdf(html, writer, props);
-        return ms.ToArray();
+        await outputStream.FlushAsync();
     }
 
     private static string ReplaceTags(string markdown)
