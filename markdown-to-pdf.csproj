@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="HtmlSanitizer" Version="9.0.886" />
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.pdfhtml" Version="5.0.0" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
