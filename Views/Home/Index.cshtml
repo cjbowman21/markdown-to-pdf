@@ -1,40 +1,72 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
 @model string
-
-<ul class="nav nav-tabs d-md-none mb-3" id="mobileTabs">
-    <li class="nav-item">
-        <button class="nav-link active" id="editor-tab" type="button">Editor</button>
-    </li>
-    <li class="nav-item">
-        <button class="nav-link" id="preview-tab" type="button">Preview</button>
-    </li>
-</ul>
-
-<div class="row">
-    <div class="col-md-6 d-md-block" id="editorPane">
-        <form method="post" asp-action="GeneratePdf">
-            @Html.AntiForgeryToken()
-            <textarea id="markdownInput" name="markdown" class="form-control no-wrap" wrap="off">@Model</textarea>
-            <button type="submit" class="btn btn-primary mt-3">Generate PDF</button>
-        </form>
-    </div>
-    <div class="col-md-6 d-none d-md-block" id="previewPane">
-        <div class="d-flex justify-content-end mb-2">
-            <div class="btn-group btn-group-sm" role="group">
-                <input type="radio" class="btn-check" name="previewMode" id="htmlPreview" autocomplete="off" checked>
-                <label class="btn btn-outline-secondary" for="htmlPreview">HTML</label>
-                <input type="radio" class="btn-check" name="previewMode" id="pdfPreview" autocomplete="off">
-                <label class="btn btn-outline-secondary" for="pdfPreview">PDF</label>
-            </div>
-        </div>
-        <div id="preview" class="border p-3 h-100"></div>
-    </div>
-</div>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="~/js/markdownEditor.js"></script>
+@{
+    ViewBag.Title = "Markdown → PDF";
 }
+
+<section class="py-5">
+  <div class="text-center mb-4">
+    <h1 class="display-5 fw-bold gradient-text">Markdown → PDF</h1>
+    <p class="lead text-muted">Paste Markdown, tweak a couple options, get a clean PDF. No fuss.</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-7">
+      <div class="card elevated">
+        <div class="card-body">
+          <form asp-action="GeneratePdf" method="post">
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Markdown</label>
+              <textarea class="form-control code-area" name="markdown" rows="16" placeholder="# Hello world…"></textarea>
+            </div>
+
+            <details class="advanced mb-3">
+              <summary class="fw-semibold">Advanced options</summary>
+              <div class="row g-3 mt-1">
+                <div class="col-6">
+                  <label class="form-label">Paper</label>
+                  <select class="form-select" name="paper">
+                    <option>Letter</option>
+                    <option>A4</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="form-label">Font scale</label>
+                  <input type="number" name="fontScale" step="0.1" value="1.0" class="form-control" />
+                </div>
+              </div>
+            </details>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary btn-lg flex-grow-1">Convert to PDF</button>
+              <button type="button" class="btn btn-outline" id="sampleFill">Fill sample</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="card elevated">
+        <div class="card-body">
+          <h6 class="text-muted mb-2">Tips</h6>
+          <ul class="small mb-0">
+            <li>Use <code>&lt;!-- {{pagebreak}} --&gt;</code> to force a page break.</li>
+            <li>Inline images should be under 2MB for best results.</li>
+            <li>We strip raw HTML by default for safety.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+@section Scripts{
+<script>
+  document.getElementById('sampleFill')?.addEventListener('click', () => {
+    const t = document.querySelector('.code-area');
+    if (t) t.value = "# md‑pdf sample\n\n- Bullets\n- **Bold** and *italic*\n\n<!-- {{pagebreak}} -->\n\n## Page 2\n\nHello 👋";
+  });
+</script>
+}
+
