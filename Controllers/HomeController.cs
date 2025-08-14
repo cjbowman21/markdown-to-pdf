@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.IO.Pipelines;
 using markdown_to_pdf.Models;
 using markdown_to_pdf.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -38,8 +39,15 @@ namespace markdown_to_pdf.Controllers
                 markdown = await reader.ReadToEndAsync();
             }
 
-            await _markdownService.GeneratePdf(markdown!, Response.Body);
-            return new FileStreamResult(Response.Body, "application/pdf")
+            var pipe = new Pipe();
+            _ = Task.Run(async () =>
+            {
+                await using var writerStream = pipe.Writer.AsStream();
+                await _markdownService.GeneratePdf(markdown!, writerStream);
+                await pipe.Writer.CompleteAsync();
+            });
+
+            return new FileStreamResult(pipe.Reader.AsStream(), "application/pdf")
             {
                 FileDownloadName = "sample.pdf"
             };
