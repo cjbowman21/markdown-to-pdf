@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using markdown_to_pdf.Services;
 using Xunit;
@@ -11,7 +12,7 @@ public class MarkdownServiceTests
     {
         var service = new MarkdownService();
         var html = service.RenderHtml("__ <!-- {{text:Name}} -->", true);
-        Assert.Contains("<input type=\"text\" name=\"Name\" />", html);
+        Assert.Contains("<input type=\"text\" name=\"Name\">", html);
     }
 
     [Fact]
@@ -30,5 +31,13 @@ public class MarkdownServiceTests
         var bytes = service.GeneratePdf("test");
         Assert.True(bytes.Length > 4);
         Assert.Equal("%PDF", Encoding.ASCII.GetString(bytes, 0, 4));
+    }
+
+    [Fact]
+    public void RenderHtml_RemovesScriptTags()
+    {
+        var service = new MarkdownService();
+        var html = service.RenderHtml("<script>alert('x')</script>", true);
+        Assert.DoesNotContain("<script>", html, StringComparison.OrdinalIgnoreCase);
     }
 }

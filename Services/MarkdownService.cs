@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Ganss.Xss;
 using Markdig;
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
@@ -14,10 +15,17 @@ public interface IMarkdownService
 public class MarkdownService : IMarkdownService
 {
     private readonly MarkdownPipeline _pipeline;
+    private readonly MarkdownPipeline _pdfPipeline;
+    private static readonly HtmlSanitizer Sanitizer = CreateSanitizer();
 
     public MarkdownService()
     {
         _pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .DisableHtml()
+            .Build();
+
+        _pdfPipeline = new MarkdownPipelineBuilder()
             .UseAdvancedExtensions()
             .Build();
     }
@@ -26,7 +34,9 @@ public class MarkdownService : IMarkdownService
     {
         markdown ??= string.Empty;
         var processed = pdfMode ? ReplaceTags(markdown) : RemoveCustomTags(markdown);
-        return Markdown.ToHtml(processed, _pipeline);
+        var pipeline = pdfMode ? _pdfPipeline : _pipeline;
+        var html = Markdown.ToHtml(processed, pipeline);
+        return Sanitizer.Sanitize(html);
     }
 
     public byte[] GeneratePdf(string markdown)
@@ -65,6 +75,18 @@ public class MarkdownService : IMarkdownService
     private static string RemoveCustomTags(string markdown)
     {
         return Regex.Replace(markdown, @"<!--\s*\{\{.*?\}\}\s*-->", string.Empty);
+    }
+
+    private static HtmlSanitizer CreateSanitizer()
+    {
+        var sanitizer = new HtmlSanitizer();
+        sanitizer.AllowedTags.Add("input");
+        sanitizer.AllowedTags.Add("div");
+        sanitizer.AllowedAttributes.Add("type");
+        sanitizer.AllowedAttributes.Add("name");
+        sanitizer.AllowedAttributes.Add("value");
+        sanitizer.AllowedAttributes.Add("style");
+        return sanitizer;
     }
 }
 
