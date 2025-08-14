@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using markdown_to_pdf.Services;
 using Xunit;
 
@@ -25,11 +27,13 @@ public class MarkdownServiceTests
     }
 
     [Fact]
-    public void GeneratePdf_ReturnsPdfBytes()
+    public async Task GeneratePdf_WritesPdfToStream()
     {
         var service = new MarkdownService();
-        var bytes = service.GeneratePdf("test");
-        Assert.True(bytes.Length > 4);
+        await using var ms = new MemoryStream();
+        await service.GeneratePdf("test", ms);
+        Assert.True(ms.Length > 4);
+        var bytes = ms.ToArray();
         Assert.Equal("%PDF", Encoding.ASCII.GetString(bytes, 0, 4));
     }
 

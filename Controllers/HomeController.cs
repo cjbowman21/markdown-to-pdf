@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.IO;
+using System.IO.Pipelines;
 using markdown_to_pdf.Models;
 using markdown_to_pdf.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -28,11 +30,27 @@ namespace markdown_to_pdf.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(2 * 1024 * 1024)]
-        public IActionResult GeneratePdf(string? markdown)
+        public async Task<IActionResult> GeneratePdf(string? markdown)
         {
-            markdown ??= System.IO.File.ReadAllText(_samplePath);
-            var pdf = _markdownService.GeneratePdf(markdown);
-            return File(pdf, "application/pdf", "sample.pdf");
+            if (markdown == null)
+            {
+                await using var fs = new FileStream(_samplePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+                using var reader = new StreamReader(fs);
+                markdown = await reader.ReadToEndAsync();
+            }
+
+            var pipe = new Pipe();
+            _ = Task.Run(async () =>
+            {
+                await using var writerStream = pipe.Writer.AsStream();
+                await _markdownService.GeneratePdf(markdown!, writerStream);
+                await pipe.Writer.CompleteAsync();
+            });
+
+            return new FileStreamResult(pipe.Reader.AsStream(), "application/pdf")
+            {
+                FileDownloadName = "sample.pdf"
+            };
         }
 
         public IActionResult Privacy()
