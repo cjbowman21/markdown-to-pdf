@@ -26,7 +26,7 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet vstest MarkdownToPdf.Tests/bin/Release/net8.0/MarkdownToPdf.Tests.dll
 
       - name: Publish artifacts
         run: dotnet publish markdown-to-pdf.csproj --configuration Release --output published

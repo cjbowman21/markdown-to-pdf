@@ -1,22 +1,21 @@
 using System.Diagnostics;
-using System.Text.RegularExpressions;
-using Markdig;
 using markdown_to_pdf.Models;
+using markdown_to_pdf.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using iText.Html2pdf;
-using iText.Kernel.Pdf;
 
 namespace markdown_to_pdf.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMarkdownService _markdownService;
         private readonly string _samplePath;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env, IMarkdownService markdownService)
         {
             _logger = logger;
+            _markdownService = markdownService;
             _samplePath = Path.Combine(env.ContentRootPath, "Samples", "markdown1.txt");
         }
 
@@ -30,40 +29,8 @@ namespace markdown_to_pdf.Controllers
         public IActionResult GeneratePdf(string? markdown)
         {
             markdown ??= System.IO.File.ReadAllText(_samplePath);
-            var processed = ReplaceTags(markdown);
-            var pipeline = new MarkdownPipelineBuilder()
-                .UseAdvancedExtensions()
-                .Build();
-            var html = Markdown.ToHtml(processed, pipeline);
-            using var ms = new MemoryStream();
-            using var writer = new PdfWriter(ms);
-            writer.SetCloseStream(false);
-            var props = new ConverterProperties().SetCreateAcroForm(true);
-            HtmlConverter.ConvertToPdf(html, writer, props);
-
-            return File(ms.ToArray(), "application/pdf", "sample.pdf");
-        }
-
-        private static string ReplaceTags(string markdown)
-        {
-            markdown = Regex.Replace(markdown,
-                @"_{2,}\s*<!--\s*\{\{text:(?<name>[^,}]+).*?\}\}\s*-->",
-                m => $"<input type=\"text\" name=\"{m.Groups["name"].Value}\" />");
-
-            markdown = Regex.Replace(markdown,
-                @"\[\s+]\s*<!--\s*\{\{check:(?<name>[^,}]+).*?\}\}\s*-->",
-                m => $"<input type=\"checkbox\" name=\"{m.Groups["name"].Value}\" />");
-
-            markdown = Regex.Replace(markdown,
-                @"\(\s+\)\s*<!--\s*\{\{radio:(?<name>[^,}]+),group=(?<group>[^,}]+),value=(?<value>[^,}]+).*?\}\}\s*-->",
-                m => $"<input type=\"radio\" name=\"{m.Groups["group"].Value}\" value=\"{m.Groups["value"].Value}\" />");
-
-            markdown = Regex.Replace(markdown,
-                @"\s*<!--\s*\{\{\s*pagebreak\s*\}\}\s*-->\s*",
-                "\n<div style=\"page-break-after: always;\"></div>\n",
-                RegexOptions.IgnoreCase);
-
-            return markdown;
+            var pdf = _markdownService.GeneratePdf(markdown);
+            return File(pdf, "application/pdf", "sample.pdf");
         }
 
         public IActionResult Privacy()

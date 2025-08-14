@@ -1,7 +1,10 @@
+using markdown_to_pdf.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IMarkdownService, MarkdownService>();
 
 var app = builder.Build();
 
