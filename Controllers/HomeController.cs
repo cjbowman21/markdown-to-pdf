@@ -26,6 +26,7 @@ namespace markdown_to_pdf.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult GeneratePdf(string? markdown)
         {
             markdown ??= System.IO.File.ReadAllText(_samplePath);
