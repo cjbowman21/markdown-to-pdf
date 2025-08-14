@@ -27,6 +27,7 @@ namespace markdown_to_pdf.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestSizeLimit(2 * 1024 * 1024)]
         public IActionResult GeneratePdf(string? markdown)
         {
             markdown ??= System.IO.File.ReadAllText(_samplePath);
