@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Packaging;
 using OpenXmlPowerTools;
 using ReverseMarkdown;
 using UglyToad.PdfPig;
+using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 using System.Xml.Linq;
 
 namespace markdown_to_pdf.Services;
@@ -61,10 +62,14 @@ public class FileParser : IFileParser
         var sb = new StringBuilder();
         foreach (var page in pdf.GetPages())
         {
-            sb.AppendLine(page.Text);
+            var text = ContentOrderTextExtractor.GetText(page);
+            sb.AppendLine(text);
             sb.AppendLine();
         }
-        return sb.ToString();
+
+        var result = sb.ToString();
+        result = Regex.Replace(result, @"^\s*\u2022\s*", "- ", RegexOptions.Multiline);
+        return result;
     }
 }
 
