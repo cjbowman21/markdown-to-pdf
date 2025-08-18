@@ -12,12 +12,14 @@ namespace markdown_to_pdf.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMarkdownService _markdownService;
+        private readonly IFileParser _fileParser;
         private readonly string _samplePath;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env, IMarkdownService markdownService)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment env, IMarkdownService markdownService, IFileParser fileParser)
         {
             _logger = logger;
             _markdownService = markdownService;
+            _fileParser = fileParser;
             _samplePath = Path.Combine(env.ContentRootPath, "Samples", "markdown1.txt");
         }
 
@@ -66,6 +68,27 @@ namespace markdown_to_pdf.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        [RequestSizeLimit(2 * 1024 * 1024)]
+        public async Task<IActionResult> UploadFile(IFormFile upload)
+        {
+            if (upload == null || upload.Length == 0)
+            {
+                return BadRequest(new { error = "No file uploaded." });
+            }
+
+            try
+            {
+                await using var stream = upload.OpenReadStream();
+                var markdown = await _fileParser.ParseToMarkdownAsync(stream, Path.GetExtension(upload.FileName));
+                return Ok(new { markdown });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }
