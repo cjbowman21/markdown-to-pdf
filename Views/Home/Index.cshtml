@@ -29,16 +29,16 @@
                 <div class="tab-pane fade show active h-100" id="markdown-pane" role="tabpanel" aria-labelledby="markdown-tab">
                     <textarea id="markdownInput" name="markdown" class="form-control no-wrap h-100" wrap="off">@Model</textarea>
                 </div>
-                <div class="tab-pane fade h-100" id="file-pane" role="tabpanel" aria-labelledby="file-tab">
-                    <div class="mb-2">
+                <div class="tab-pane fade h-100 d-flex flex-column" id="file-pane" role="tabpanel" aria-labelledby="file-tab">
+                    <div class="mb-3">
                         <input type="file" id="fileInput" name="upload" class="d-none" accept=".pdf,.doc,.docx,.txt" />
                         <label for="fileInput" id="uploadLabel" class="btn btn-secondary">Upload</label>
                         <div class="form-text">Results are a best guess and may not always be perfect due to the nature of PDF and Word document formatting.</div>
                     </div>
-                    <div id="fileProgress" class="progress d-none">
+                    <div id="fileProgress" class="progress d-none mb-2">
                         <div class="progress-bar" role="progressbar" style="width: 0%"></div>
                     </div>
-                    <div id="fileInfo" class="mt-2 d-none">
+                    <div id="fileInfo" class="d-none">
                         <div id="uploadedFileName" class="fw-bold"></div>
                         <ul id="uploadedFileDetails" class="mb-0 list-unstyled"></ul>
                     </div>

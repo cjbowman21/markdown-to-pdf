@@ -4,13 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = fileProgress ? fileProgress.querySelector('.progress-bar') : null;
     const fileError = document.getElementById('fileError');
     const markdownInput = document.getElementById('markdownInput');
-    const markdownTab = document.getElementById('markdown-tab');
     const fileInfo = document.getElementById('fileInfo');
     const uploadedFileName = document.getElementById('uploadedFileName');
     const uploadedFileDetails = document.getElementById('uploadedFileDetails');
     const uploadLabel = document.getElementById('uploadLabel');
 
-    if (!fileInput || !fileProgress || !progressBar || !fileError || !markdownInput || !markdownTab || !fileInfo || !uploadedFileName || !uploadedFileDetails || !uploadLabel) {
+    if (!fileInput || !fileProgress || !progressBar || !fileError || !markdownInput || !fileInfo || !uploadedFileName || !uploadedFileDetails || !uploadLabel) {
         return;
     }
 
@@ -23,8 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fileError.textContent = '';
         fileInfo.classList.add('d-none');
         fileProgress.classList.remove('d-none');
-        progressBar.style.width = '0%';
-        let progress = 0;
+        progressBar.style.width = '10%';
+        let progress = 10;
         const interval = setInterval(() => {
             progress = Math.min(progress + 10, 95);
             progressBar.style.width = progress + '%';
@@ -49,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>Checkboxes: ${data.details.checkboxCount}</li>`;
                 fileInfo.classList.remove('d-none');
                 uploadLabel.textContent = 'Upload Different File';
-                bootstrap.Tab.getOrCreateInstance(markdownTab).show();
             } else {
                 fileError.textContent = data.error || 'Failed to parse file.';
             }
@@ -60,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             progressBar.style.width = '100%';
             setTimeout(() => {
                 fileProgress.classList.add('d-none');
-            }, 200);
+            }, 500);
             fileInput.value = '';
         }
     });
