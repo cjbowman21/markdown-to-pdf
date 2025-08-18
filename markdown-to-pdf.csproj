@@ -13,6 +13,10 @@
     <PackageReference Include="itext7" Version="8.0.2" />
     <PackageReference Include="itext7.pdfhtml" Version="5.0.0" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.2" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
+    <PackageReference Include="OpenXmlPowerTools" Version="4.5.3.2" />
+    <PackageReference Include="ReverseMarkdown" Version="4.7.0" />
+    <PackageReference Include="PdfPig" Version="0.1.11" />
   </ItemGroup>
 
   <ItemGroup>
