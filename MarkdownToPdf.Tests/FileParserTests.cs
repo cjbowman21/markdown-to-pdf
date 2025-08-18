@@ -95,4 +95,19 @@ public class FileParserTests
         Assert.Contains("Body text.", markdown);
     }
 
+    [Fact]
+    public async Task ParseToMarkdownAsync_ConvertsPdfTable()
+    {
+        var parser = new FileParser();
+        var builder = new PdfDocumentBuilder();
+        var page = builder.AddPage(595, 842);
+        var font = builder.AddStandard14Font(Standard14Font.Helvetica);
+        page.AddText("Col1   Col2", 12, new PdfPoint(25, 800), font);
+        page.AddText("A1   B1", 12, new PdfPoint(25, 780), font);
+        var pdfBytes = builder.Build();
+        await using var ms = new MemoryStream(pdfBytes);
+        var markdown = await parser.ParseToMarkdownAsync(ms, ".pdf");
+        Assert.Contains("| Col1 | Col2 |", markdown);
+        Assert.Contains("| A1 | B1 |", markdown);
+    }
 }

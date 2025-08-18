@@ -1,5 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using OpenXmlPowerTools;
 using ReverseMarkdown;
@@ -70,6 +72,7 @@ public class FileParser : IFileParser
         var result = sb.ToString();
         result = Regex.Replace(result, @"^\s*\u2022\s*", "- ", RegexOptions.Multiline);
         result = Regex.Replace(result, @"\s*\u2022\s*(?=\S)", "\n- ");
+        result = Regex.Replace(result, @"\u2022", string.Empty);
         result = ApplyHeadingFormatting(result);
         return result;
     }
@@ -78,16 +81,42 @@ public class FileParser : IFileParser
     {
         var lines = text.Split('\n');
         var sb = new StringBuilder();
-        var headingPattern = new Regex(@"^[A-Z][A-Za-z &]+$");
+        var headingPattern = new Regex(@"^[A-Z][A-Za-z &'()]+$");
         var first = true;
-        foreach (var rawLine in lines)
+        List<string[]> table = new();
+
+        void FlushTable()
         {
+            if (table.Count == 0) return;
+            sb.AppendLine("| " + string.Join(" | ", table[0]) + " |");
+            sb.AppendLine("|" + string.Join("|", table[0].Select(_ => " --- ")) + "|");
+            for (int i = 1; i < table.Count; i++)
+            {
+                sb.AppendLine("| " + string.Join(" | ", table[i]) + " |");
+            }
+            sb.AppendLine();
+            table.Clear();
+        }
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var rawLine = lines[i];
             var line = rawLine.TrimEnd();
             if (string.IsNullOrWhiteSpace(line))
             {
+                FlushTable();
                 sb.AppendLine();
                 continue;
             }
+
+            if (Regex.IsMatch(line, @"\s{2,}"))
+            {
+                var cells = Regex.Split(line.Trim(), @"\s{2,}");
+                table.Add(cells);
+                continue;
+            }
+
+            FlushTable();
 
             if (line.StartsWith("- "))
             {
@@ -95,14 +124,15 @@ public class FileParser : IFileParser
                 continue;
             }
 
+            var nextLine = i + 1 < lines.Length ? lines[i + 1].Trim() : string.Empty;
+            bool nextIsHeadingLike = headingPattern.IsMatch(nextLine);
+
             if (first)
             {
                 sb.AppendLine("# " + line.Trim());
                 first = false;
-                continue;
             }
-
-            if (headingPattern.IsMatch(line.Trim()))
+            else if (headingPattern.IsMatch(line.Trim()) && !nextIsHeadingLike)
             {
                 sb.AppendLine("## " + line.Trim());
             }
@@ -111,6 +141,8 @@ public class FileParser : IFileParser
                 sb.AppendLine(line);
             }
         }
+
+        FlushTable();
         return sb.ToString();
     }
 }
