@@ -9,10 +9,13 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm surface mb-4">
+        <nav class="navbar surface sticky-top py-2 mb-4">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">markdown_to_pdf</a>
-                <div class="d-flex align-items-center ms-auto">
+                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/favicon.ico" alt="Logo" width="24" height="24" class="me-2" />
+                    markdown_to_pdf
+                </a>
+                <div class="d-flex align-items-center ms-auto gap-2">
                     <button id="themeToggle" class="btn btn-link" aria-label="Toggle dark mode">
                         <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.75V3m0 18v-1.75M4.75 12H3m18 0h-1.75M5.219 5.219l-.969-.969m15.5 15.5-.969-.969M5.219 18.781l-.969.969m15.5-15.5-.969.969M12 7a5 5 0 100 10 5 5 0 000-10z" />
@@ -21,19 +24,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
                         </svg>
                     </button>
-                    <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                    <a href="https://github.com" target="_blank" rel="noopener" class="nav-link p-0">GitHub</a>
                 </div>
             </div>
         </nav>
@@ -44,9 +35,13 @@
         </main>
     </div>
 
-    <footer class="surface footer text-muted mt-4 p-3">
+    <footer class="surface text-muted small mt-4 py-2">
         <div class="container-fluid text-center">
-            &copy; 2025 - markdown_to_pdf - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-muted">Privacy</a>
+            ·
+            <a asp-area="" asp-controller="Home" asp-action="About" class="text-muted">About</a>
+            ·
+            <span>v@typeof(Program).Assembly.GetName().Version?.ToString(3)</span>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
