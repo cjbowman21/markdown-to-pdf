@@ -70,7 +70,48 @@ public class FileParser : IFileParser
         var result = sb.ToString();
         result = Regex.Replace(result, @"^\s*\u2022\s*", "- ", RegexOptions.Multiline);
         result = Regex.Replace(result, @"\s*\u2022\s*(?=\S)", "\n- ");
+        result = ApplyHeadingFormatting(result);
         return result;
+    }
+
+    private static string ApplyHeadingFormatting(string text)
+    {
+        var lines = text.Split('\n');
+        var sb = new StringBuilder();
+        var headingPattern = new Regex(@"^[A-Z][A-Za-z &]+$");
+        var first = true;
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.TrimEnd();
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                sb.AppendLine();
+                continue;
+            }
+
+            if (line.StartsWith("- "))
+            {
+                sb.AppendLine(line);
+                continue;
+            }
+
+            if (first)
+            {
+                sb.AppendLine("# " + line.Trim());
+                first = false;
+                continue;
+            }
+
+            if (headingPattern.IsMatch(line.Trim()))
+            {
+                sb.AppendLine("## " + line.Trim());
+            }
+            else
+            {
+                sb.AppendLine(line);
+            }
+        }
+        return sb.ToString();
     }
 }
 
