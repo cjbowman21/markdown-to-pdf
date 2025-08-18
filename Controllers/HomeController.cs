@@ -5,6 +5,7 @@ using markdown_to_pdf.Models;
 using markdown_to_pdf.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace markdown_to_pdf.Controllers
 {
@@ -83,7 +84,24 @@ namespace markdown_to_pdf.Controllers
             {
                 await using var stream = upload.OpenReadStream();
                 var markdown = await _fileParser.ParseToMarkdownAsync(stream, Path.GetExtension(upload.FileName));
-                return Ok(new { markdown });
+
+                var wordCount = Regex.Matches(markdown, "\\b\\w+\\b").Count;
+                var headingCount = Regex.Matches(markdown, "^#{1,6}\\s", RegexOptions.Multiline).Count;
+                var listItemCount = Regex.Matches(markdown, "^\\s*(?:[-*+]|\\d+\\.)\\s", RegexOptions.Multiline).Count;
+                var checkboxCount = Regex.Matches(markdown, "^\\s*[-*+]\\s+\\[[ xX]\\]\\s", RegexOptions.Multiline).Count;
+
+                return Ok(new
+                {
+                    markdown,
+                    details = new
+                    {
+                        fileName = upload.FileName,
+                        wordCount,
+                        headingCount,
+                        listItemCount,
+                        checkboxCount
+                    }
+                });
             }
             catch (Exception ex)
             {
