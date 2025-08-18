@@ -15,10 +15,9 @@
 
 <div class="row">
     <div class="col-md-6 d-md-block" id="editorPane">
-        <form method="post" asp-action="GeneratePdf">
+        <form method="post" asp-action="GeneratePdf" id="pdfForm">
             @Html.AntiForgeryToken()
             <textarea id="markdownInput" name="markdown" class="form-control no-wrap" wrap="off">@Model</textarea>
-            <button type="submit" class="btn btn-primary mt-3">Generate PDF</button>
         </form>
     </div>
     <div class="col-md-6 d-none d-md-block" id="previewPane">
@@ -33,6 +32,23 @@
         <div id="preview" class="surface p-3 h-100"></div>
     </div>
 </div>
+
+@section Footer {
+    <footer class="fixed-bottom surface border-top p-3">
+        <div class="container-fluid">
+            <div class="collapse d-md-block mb-2" id="optionsCollapse">
+                <div class="d-flex align-items-center">
+                    <label for="fileName" class="form-label mb-0 me-2">Filename:</label>
+                    <input type="text" id="fileName" name="fileName" form="pdfForm" class="form-control form-control-sm" placeholder="document" />
+                </div>
+            </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <button class="btn btn-outline-secondary me-2 d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#optionsCollapse" aria-expanded="false" aria-controls="optionsCollapse">&#9650;</button>
+                <button type="submit" form="pdfForm" class="btn btn-primary">Generate PDF</button>
+            </div>
+        </div>
+    </footer>
+}
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

@@ -33,6 +33,7 @@ body {
   min-height: 100vh;
   transition: background var(--transition), color var(--transition);
   margin: 0;
+  padding-bottom: 5rem;
 }
 
 h1,h2,h3,h4,h5,h6 {

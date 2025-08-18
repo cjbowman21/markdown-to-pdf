@@ -44,11 +44,7 @@
         </main>
     </div>
 
-    <footer class="surface footer text-muted mt-4 p-3">
-        <div class="container-fluid text-center">
-            &copy; 2025 - markdown_to_pdf - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    @await RenderSectionAsync("Footer", required: false)
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

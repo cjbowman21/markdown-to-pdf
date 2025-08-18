@@ -30,7 +30,7 @@ namespace markdown_to_pdf.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(2 * 1024 * 1024)]
-        public async Task<IActionResult> GeneratePdf(string? markdown)
+        public async Task<IActionResult> GeneratePdf(string? markdown, string? fileName)
         {
             if (markdown == null)
             {
@@ -47,9 +47,13 @@ namespace markdown_to_pdf.Controllers
                 await pipe.Writer.CompleteAsync();
             });
 
+            var downloadName = string.IsNullOrWhiteSpace(fileName)
+                ? "document"
+                : Path.GetFileNameWithoutExtension(fileName);
+
             return new FileStreamResult(pipe.Reader.AsStream(), "application/pdf")
             {
-                FileDownloadName = "sample.pdf"
+                FileDownloadName = $"{downloadName}.pdf"
             };
         }
 
