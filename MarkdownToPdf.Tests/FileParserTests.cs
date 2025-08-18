@@ -63,4 +63,20 @@ public class FileParserTests
         Assert.Contains("- World", markdown);
     }
 
+    [Fact]
+    public async Task ParseToMarkdownAsync_SplitsInlinePdfBullets()
+    {
+        var parser = new FileParser();
+        var builder = new PdfDocumentBuilder();
+        var page = builder.AddPage(595, 842);
+        var font = builder.AddStandard14Font(Standard14Font.Helvetica);
+        page.AddText("Item1 \u2022 Item2 \u2022 Item3", 12, new PdfPoint(25, 800), font);
+        var pdfBytes = builder.Build();
+        await using var ms = new MemoryStream(pdfBytes);
+        var markdown = await parser.ParseToMarkdownAsync(ms, ".pdf");
+        Assert.Contains("Item1", markdown);
+        Assert.Contains("- Item2", markdown);
+        Assert.Contains("- Item3", markdown);
+    }
+
 }

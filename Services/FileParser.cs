@@ -69,6 +69,7 @@ public class FileParser : IFileParser
 
         var result = sb.ToString();
         result = Regex.Replace(result, @"^\s*\u2022\s*", "- ", RegexOptions.Multiline);
+        result = Regex.Replace(result, @"\s*\u2022\s*(?=\S)", "\n- ");
         return result;
     }
 }
