@@ -3,11 +3,9 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
-using OpenXmlPowerTools;
-using ReverseMarkdown;
+using DocumentFormat.OpenXml.Wordprocessing;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
-using System.Xml.Linq;
 
 namespace markdown_to_pdf.Services;
 
@@ -41,18 +39,39 @@ public class FileParser : IFileParser
         using var ms = new MemoryStream();
         await file.CopyToAsync(ms);
         ms.Position = 0;
-        using var doc = WordprocessingDocument.Open(ms, true);
-        var settings = new HtmlConverterSettings
+        using var doc = WordprocessingDocument.Open(ms, false);
+        var sb = new StringBuilder();
+        var body = doc.MainDocumentPart!.Document.Body;
+        foreach (var para in body.Elements<Paragraph>())
         {
-            PageTitle = "",
-            FabricateCssClasses = false,
-            ImageHandler = null
-        };
-        var html = HtmlConverter.ConvertToHtml(doc, settings);
-        var htmlString = html.ToString(SaveOptions.DisableFormatting);
-        htmlString = Regex.Replace(htmlString, "<img[^>]*>", string.Empty, RegexOptions.IgnoreCase);
-        var converter = new Converter(new Config { GithubFlavored = true });
-        return converter.Convert(htmlString);
+            var text = para.InnerText ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                sb.AppendLine();
+                continue;
+            }
+
+            var styleId = para.ParagraphProperties?.ParagraphStyleId?.Val?.Value;
+            if (styleId != null && styleId.StartsWith("Heading", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!int.TryParse(styleId.Substring("Heading".Length), out var level))
+                {
+                    level = 1;
+                }
+                level = Math.Clamp(level, 1, 6);
+                sb.AppendLine(new string('#', level) + " " + text);
+            }
+            else if (para.ParagraphProperties?.NumberingProperties != null)
+            {
+                sb.AppendLine("- " + text);
+            }
+            else
+            {
+                sb.AppendLine(text);
+            }
+        }
+
+        return sb.ToString();
     }
 
     private static async Task<string> ParsePdfAsync(Stream file)
