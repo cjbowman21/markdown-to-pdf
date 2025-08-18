@@ -93,7 +93,6 @@ public class FileParser : IFileParser
         result = Regex.Replace(result, @"\s*\u2022\s*(?=\S)", "\n- ");
         result = Regex.Replace(result, @"\u2022", string.Empty);
         result = ApplyHeadingFormatting(result);
-        result = Regex.Replace(result, @"\d{9,}", string.Empty);
         result = Regex.Replace(result, @"^\s*☐+\s*", string.Empty, RegexOptions.Multiline);
         return result;
     }
@@ -130,10 +129,16 @@ public class FileParser : IFileParser
                 continue;
             }
 
-            if (Regex.IsMatch(line.Trim(), @"^\d{9,}$"))
+            var trimmed = line.Trim();
+            if (Regex.IsMatch(trimmed, @"^\d{9,}$"))
             {
+                FlushTable();
+                sb.AppendLine(new string('_', trimmed.Length));
                 continue;
             }
+
+            line = Regex.Replace(line, @"^\d{9,}\s*", string.Empty);
+            line = Regex.Replace(line, @"\d{9,}", string.Empty);
 
             if (Regex.IsMatch(line, @"\s{2,}"))
             {

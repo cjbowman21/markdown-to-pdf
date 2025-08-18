@@ -112,7 +112,7 @@ public class FileParserTests
     }
 
     [Fact]
-    public async Task ParseToMarkdownAsync_StripsLargeStandaloneNumbers()
+    public async Task ParseToMarkdownAsync_ConvertsLargeStandaloneNumbers()
     {
         var parser = new FileParser();
         var builder = new PdfDocumentBuilder();
@@ -124,6 +124,7 @@ public class FileParserTests
         await using var ms = new MemoryStream(pdfBytes);
         var markdown = await parser.ParseToMarkdownAsync(ms, ".pdf");
         Assert.Contains("Question", markdown);
+        Assert.Contains("____________", markdown);
         Assert.DoesNotContain("123456789012", markdown);
     }
 
