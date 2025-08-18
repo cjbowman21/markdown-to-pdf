@@ -9,8 +9,8 @@
     localStorage.setItem(storageKey, theme);
     const isDark = theme === 'dark';
     if (sun && moon) {
-      sun.style.display = isDark ? 'none' : 'block';
-      moon.style.display = isDark ? 'block' : 'none';
+      sun.classList.toggle('d-none', isDark);
+      moon.classList.toggle('d-none', !isDark);
     }
     if (toggle) {
       toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');

@@ -1,4 +1,4 @@
-(() => {
+document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('markdownInput');
     const preview = document.getElementById('preview');
     const previewScroll = preview;
@@ -8,6 +8,9 @@
     const previewTab = document.getElementById('preview-tab');
     const htmlModeTab = document.getElementById('htmlModeTab');
     const pdfModeTab = document.getElementById('pdfModeTab');
+    if (!input || !preview || !editorTab || !previewTab || !htmlModeTab || !pdfModeTab) {
+        return;
+    }
     let previewMode = 'html';
     let lines = [];
     let elementMap = new Map();
@@ -40,7 +43,7 @@
                 .replace(/\(\s+\)\s*<!--\s*\{\{radio:([^,}]+),group=([^,}]+),value=([^,}]+).*?\}\}\s*-->/g,
                     (m, _name, group, value) => `<input type="radio" name="${group}" value="${value}" />`)
                 .replace(/\s*<!--\s*\{\{\s*pagebreak\s*\}\}\s*-->\s*/gi,
-                    '\n<div style="page-break-after: always;"></div>\n')
+                    '\n<div class="page-break"></div>\n')
                 .replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
         } else {
             processed = raw.replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
@@ -152,4 +155,4 @@
     input.addEventListener('mouseleave', clearHighlight);
 
     updatePreview();
-})();
+});
