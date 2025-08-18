@@ -93,6 +93,8 @@ public class FileParser : IFileParser
         result = Regex.Replace(result, @"\s*\u2022\s*(?=\S)", "\n- ");
         result = Regex.Replace(result, @"\u2022", string.Empty);
         result = ApplyHeadingFormatting(result);
+        result = Regex.Replace(result, @"\b\d{11,}\b", string.Empty);
+        result = Regex.Replace(result, @"^\s*☐+\s*", string.Empty, RegexOptions.Multiline);
         return result;
     }
 
