@@ -108,6 +108,14 @@ select:focus {
   outline-offset: 2px;
 }
 
+input:focus,
+textarea:focus,
+select:focus,
+.form-control:focus {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
 .surface {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
