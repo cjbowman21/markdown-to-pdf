@@ -17,6 +17,7 @@
     <PackageReference Include="OpenXmlPowerTools" Version="4.5.3.2" />
     <PackageReference Include="ReverseMarkdown" Version="4.7.0" />
     <PackageReference Include="PdfPig" Version="0.1.11" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
   </ItemGroup>
 
   <ItemGroup>
