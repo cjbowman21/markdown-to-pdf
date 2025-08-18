@@ -175,6 +175,9 @@ tr.highlight > th {
 
 #editorPane .tab-pane {
   height: 100%;
+}
+
+#editorPane .tab-pane.active {
   display: flex;
   flex-direction: column;
 }
