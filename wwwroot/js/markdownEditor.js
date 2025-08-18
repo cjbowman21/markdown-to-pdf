@@ -6,8 +6,9 @@
     const previewPane = document.getElementById('previewPane');
     const editorTab = document.getElementById('editor-tab');
     const previewTab = document.getElementById('preview-tab');
-    const htmlMode = document.getElementById('htmlPreview');
-    const pdfMode = document.getElementById('pdfPreview');
+    const htmlModeTab = document.getElementById('htmlModeTab');
+    const pdfModeTab = document.getElementById('pdfModeTab');
+    let previewMode = 'html';
     let lines = [];
     let elementMap = new Map();
     let syncingFromInput = false;
@@ -32,7 +33,7 @@
         const raw = input.value;
         let processed;
 
-        if (pdfMode.checked) {
+        if (previewMode === 'pdf') {
             processed = raw
                 .replace(/_{2,}\s*<!--\s*\{\{text:([^,}]+).*?\}\}\s*-->/g, (m, name) => `<input type="text" name="${name}" />`)
                 .replace(/\[\s+]\s*<!--\s*\{\{check:([^,}]+).*?\}\}\s*-->/g, (m, name) => `<input type="checkbox" name="${name}" />`)
@@ -73,12 +74,14 @@
     function showEditor() {
         editorPane.classList.remove('d-none');
         previewPane.classList.add('d-none');
+        previewPane.classList.remove('d-flex');
         editorTab.classList.add('active');
         previewTab.classList.remove('active');
     }
 
     function showPreview() {
         previewPane.classList.remove('d-none');
+        previewPane.classList.add('d-flex');
         editorPane.classList.add('d-none');
         previewTab.classList.add('active');
         editorTab.classList.remove('active');
@@ -93,8 +96,18 @@
     previewTab.addEventListener('click', showPreview);
 
     input.addEventListener('input', updatePreview);
-    htmlMode.addEventListener('change', updatePreview);
-    pdfMode.addEventListener('change', updatePreview);
+    htmlModeTab.addEventListener('click', () => {
+        previewMode = 'html';
+        htmlModeTab.classList.add('active');
+        pdfModeTab.classList.remove('active');
+        updatePreview();
+    });
+    pdfModeTab.addEventListener('click', () => {
+        previewMode = 'pdf';
+        pdfModeTab.classList.add('active');
+        htmlModeTab.classList.remove('active');
+        updatePreview();
+    });
 
     input.addEventListener('scroll', () => {
         if (syncingFromPreview) {

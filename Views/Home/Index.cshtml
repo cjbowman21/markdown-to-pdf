@@ -15,21 +15,36 @@
 
 <div class="row">
     <div class="col-md-6 d-md-block" id="editorPane">
-        <form method="post" asp-action="GeneratePdf" id="pdfForm">
+        <form method="post" asp-action="GeneratePdf" id="pdfForm" class="h-100 d-flex flex-column">
             @Html.AntiForgeryToken()
-            <textarea id="markdownInput" name="markdown" class="form-control no-wrap" wrap="off">@Model</textarea>
+            <ul class="nav nav-tabs mb-2" id="editorTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="markdown-tab" data-bs-toggle="tab" data-bs-target="#markdown-pane" type="button" role="tab" aria-controls="markdown-pane" aria-selected="true">Markdown</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="file-tab" data-bs-toggle="tab" data-bs-target="#file-pane" type="button" role="tab" aria-controls="file-pane" aria-selected="false">File</button>
+                </li>
+            </ul>
+            <div class="tab-content flex-grow-1">
+                <div class="tab-pane fade show active h-100" id="markdown-pane" role="tabpanel" aria-labelledby="markdown-tab">
+                    <textarea id="markdownInput" name="markdown" class="form-control no-wrap h-100" wrap="off">@Model</textarea>
+                </div>
+                <div class="tab-pane fade h-100" id="file-pane" role="tabpanel" aria-labelledby="file-tab">
+                    <input type="file" id="fileInput" name="upload" class="form-control" accept=".pdf,.doc,.docx,.txt" />
+                </div>
+            </div>
         </form>
     </div>
-    <div class="col-md-6 d-none d-md-block" id="previewPane">
-        <div class="d-flex justify-content-end mb-2">
-            <div class="btn-group btn-group-sm" role="group">
-                <input type="radio" class="btn-check" name="previewMode" id="htmlPreview" autocomplete="off" checked>
-                <label class="btn btn-outline-secondary" for="htmlPreview">HTML</label>
-                <input type="radio" class="btn-check" name="previewMode" id="pdfPreview" autocomplete="off">
-                <label class="btn btn-outline-secondary" for="pdfPreview">PDF</label>
-            </div>
-        </div>
-        <div id="preview" class="surface p-3 h-100"></div>
+    <div class="col-md-6 d-none d-md-flex flex-column" id="previewPane">
+        <ul class="nav nav-tabs mb-2" id="previewTabs">
+            <li class="nav-item">
+                <button class="nav-link active" id="htmlModeTab" type="button">HTML</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="pdfModeTab" type="button">PDF</button>
+            </li>
+        </ul>
+        <div id="preview" class="surface p-3 flex-grow-1 overflow-auto"></div>
     </div>
 </div>
 
