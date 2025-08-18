@@ -1,4 +1,4 @@
-(() => {
+document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('markdownInput');
     const preview = document.getElementById('preview');
     const previewScroll = preview;
@@ -6,8 +6,12 @@
     const previewPane = document.getElementById('previewPane');
     const editorTab = document.getElementById('editor-tab');
     const previewTab = document.getElementById('preview-tab');
-    const htmlMode = document.getElementById('htmlPreview');
-    const pdfMode = document.getElementById('pdfPreview');
+    const htmlModeTab = document.getElementById('htmlModeTab');
+    const pdfModeTab = document.getElementById('pdfModeTab');
+    if (!input || !preview || !editorTab || !previewTab || !htmlModeTab || !pdfModeTab) {
+        return;
+    }
+    let previewMode = 'html';
     let lines = [];
     let elementMap = new Map();
     let syncingFromInput = false;
@@ -32,14 +36,14 @@
         const raw = input.value;
         let processed;
 
-        if (pdfMode.checked) {
+        if (previewMode === 'pdf') {
             processed = raw
                 .replace(/_{2,}\s*<!--\s*\{\{text:([^,}]+).*?\}\}\s*-->/g, (m, name) => `<input type="text" name="${name}" />`)
                 .replace(/\[\s+]\s*<!--\s*\{\{check:([^,}]+).*?\}\}\s*-->/g, (m, name) => `<input type="checkbox" name="${name}" />`)
                 .replace(/\(\s+\)\s*<!--\s*\{\{radio:([^,}]+),group=([^,}]+),value=([^,}]+).*?\}\}\s*-->/g,
                     (m, _name, group, value) => `<input type="radio" name="${group}" value="${value}" />`)
                 .replace(/\s*<!--\s*\{\{\s*pagebreak\s*\}\}\s*-->\s*/gi,
-                    '\n<div style="page-break-after: always;"></div>\n')
+                    '\n<div class="page-break"></div>\n')
                 .replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
         } else {
             processed = raw.replace(/<!--\s*\{\{.*?\}\}\s*-->/g, '');
@@ -73,12 +77,14 @@
     function showEditor() {
         editorPane.classList.remove('d-none');
         previewPane.classList.add('d-none');
+        previewPane.classList.remove('d-flex');
         editorTab.classList.add('active');
         previewTab.classList.remove('active');
     }
 
     function showPreview() {
         previewPane.classList.remove('d-none');
+        previewPane.classList.add('d-flex');
         editorPane.classList.add('d-none');
         previewTab.classList.add('active');
         editorTab.classList.remove('active');
@@ -93,8 +99,18 @@
     previewTab.addEventListener('click', showPreview);
 
     input.addEventListener('input', updatePreview);
-    htmlMode.addEventListener('change', updatePreview);
-    pdfMode.addEventListener('change', updatePreview);
+    htmlModeTab.addEventListener('click', () => {
+        previewMode = 'html';
+        htmlModeTab.classList.add('active');
+        pdfModeTab.classList.remove('active');
+        updatePreview();
+    });
+    pdfModeTab.addEventListener('click', () => {
+        previewMode = 'pdf';
+        pdfModeTab.classList.add('active');
+        htmlModeTab.classList.remove('active');
+        updatePreview();
+    });
 
     input.addEventListener('scroll', () => {
         if (syncingFromPreview) {
@@ -139,4 +155,4 @@
     input.addEventListener('mouseleave', clearHighlight);
 
     updatePreview();
-})();
+});

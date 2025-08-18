@@ -33,6 +33,7 @@ body {
   min-height: 100vh;
   transition: background var(--transition), color var(--transition);
   margin: 0;
+  padding-bottom: 5rem;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -148,16 +149,31 @@ tr.highlight > th {
   height: 80vh;
 }
 
-#markdownInput,
-#preview {
+#previewPane {
+  display: flex;
+  flex-direction: column;
+}
+
+#markdownInput {
   height: 100%;
 }
 
 #preview {
+  flex: 1 1 auto;
   overflow-y: auto;
 }
 
 #editorPane form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+#editorPane .tab-content {
+  flex: 1 1 auto;
+}
+
+#editorPane .tab-pane {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -177,6 +193,10 @@ tr.highlight > th {
 #preview input[type="checkbox"],
 #preview input[type="radio"] {
   margin-right: 4px;
+}
+
+.page-break {
+  page-break-after: always;
 }
 
 #themeToggle svg {
