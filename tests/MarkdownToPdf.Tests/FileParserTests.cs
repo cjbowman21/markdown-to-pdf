@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
-using markdown_to_pdf.Services;
+using MarkdownToPdf.Web.Services;
 using UglyToad.PdfPig.Writer;
 using UglyToad.PdfPig.Core;
 using UglyToad.PdfPig.Fonts.Standard14Fonts;

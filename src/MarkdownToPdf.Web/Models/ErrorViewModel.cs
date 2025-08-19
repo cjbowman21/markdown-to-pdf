@@ -1,4 +1,4 @@
-namespace markdown_to_pdf.Models
+namespace MarkdownToPdf.Web.Models
 {
     public class ErrorViewModel
     {

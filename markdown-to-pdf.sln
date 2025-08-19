@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36221.1 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "markdown-to-pdf", "src\markdown-to-pdf\markdown-to-pdf.csproj", "{0453DAFC-CFE1-4FB4-94EB-E34E56D22B4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "markdown-to-pdf", "src\MarkdownToPdf.Web\markdown-to-pdf.csproj", "{0453DAFC-CFE1-4FB4-94EB-E34E56D22B4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownToPdf.Tests", "tests\MarkdownToPdf.Tests\MarkdownToPdf.Tests.csproj", "{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}"
 EndProject

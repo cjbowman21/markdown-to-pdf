@@ -1,13 +1,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipelines;
-using markdown_to_pdf.Models;
-using markdown_to_pdf.Services;
+using MarkdownToPdf.Web.Models;
+using MarkdownToPdf.Web.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
-namespace markdown_to_pdf.Controllers
+namespace MarkdownToPdf.Web.Controllers
 {
     public class HomeController : Controller
     {

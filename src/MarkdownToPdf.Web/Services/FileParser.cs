@@ -7,7 +7,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
-namespace markdown_to_pdf.Services;
+namespace MarkdownToPdf.Web.Services;
 
 public interface IFileParser
 {

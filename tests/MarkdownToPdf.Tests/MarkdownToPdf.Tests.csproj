@@ -21,7 +21,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
-    <ProjectReference Include="../../src/markdown-to-pdf/markdown-to-pdf.csproj" />
+    <ProjectReference Include="../../src/MarkdownToPdf.Web/markdown-to-pdf.csproj" />
   </ItemGroup>
 
 </Project>

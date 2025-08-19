@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using markdown_to_pdf.Services;
+using MarkdownToPdf.Web.Services;
 using Xunit;
 
 namespace MarkdownToPdf.Tests;
