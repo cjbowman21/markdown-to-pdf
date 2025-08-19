@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "markdown-to-pdf", "src\Mark
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownToPdf.Tests", "tests\MarkdownToPdf.Tests\MarkdownToPdf.Tests.csproj", "{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{94B442BC-5AD8-4EA3-8E23-A95A00211643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownToPdf.Core", "src\MarkdownToPdf.Core\MarkdownToPdf.Core.csproj", "{013222D1-1A39-4ECD-A0A0-A7B20482DC4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +25,18 @@ Global
 		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C212A61C-4A6C-4296-B521-6AD8FFCA83FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{013222D1-1A39-4ECD-A0A0-A7B20482DC4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{013222D1-1A39-4ECD-A0A0-A7B20482DC4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{013222D1-1A39-4ECD-A0A0-A7B20482DC4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{013222D1-1A39-4ECD-A0A0-A7B20482DC4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AFECD6FB-24C5-4E9D-AB9F-E18859082AA3}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{013222D1-1A39-4ECD-A0A0-A7B20482DC4B} = {94B442BC-5AD8-4EA3-8E23-A95A00211643}
 	EndGlobalSection
 EndGlobal

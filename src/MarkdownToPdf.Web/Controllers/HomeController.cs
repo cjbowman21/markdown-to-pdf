@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Pipelines;
 using MarkdownToPdf.Web.Models;
-using MarkdownToPdf.Web.Services;
+using MarkdownToPdf.Core.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;

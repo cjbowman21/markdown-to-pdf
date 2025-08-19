@@ -6,7 +6,7 @@ using iText.Html2pdf;
 using iText.Kernel.Pdf;
 using System.Threading.Tasks;
 
-namespace MarkdownToPdf.Web.Services;
+namespace MarkdownToPdf.Core.Services;
 
 public interface IMarkdownService
 {
