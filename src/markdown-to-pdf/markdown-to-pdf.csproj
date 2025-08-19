@@ -17,10 +17,5 @@
     <PackageReference Include="PdfPig" Version="0.1.11" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="MarkdownToPdf.Tests/**/*" />
-    <EmbeddedResource Remove="MarkdownToPdf.Tests/**/*" />
-    <None Remove="MarkdownToPdf.Tests/**/*" />
-  </ItemGroup>
 
 </Project>

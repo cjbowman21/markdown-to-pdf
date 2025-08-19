@@ -26,10 +26,10 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet vstest MarkdownToPdf.Tests/bin/Release/net8.0/MarkdownToPdf.Tests.dll
+        run: dotnet vstest tests/MarkdownToPdf.Tests/bin/Release/net8.0/MarkdownToPdf.Tests.dll
 
       - name: Publish artifacts
-        run: dotnet publish markdown-to-pdf.csproj --configuration Release --output published
+        run: dotnet publish src/markdown-to-pdf/markdown-to-pdf.csproj --configuration Release --output published
         # Upload build output (optional)
       - uses: actions/upload-artifact@v4
         with:
