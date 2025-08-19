@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>markdown_to_pdf</RootNamespace>
+    <RootNamespace>MarkdownToPdf.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

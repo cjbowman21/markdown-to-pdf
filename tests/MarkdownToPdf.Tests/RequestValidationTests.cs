@@ -1,5 +1,5 @@
 using System.Reflection;
-using markdown_to_pdf.Controllers;
+using MarkdownToPdf.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Metadata;
 using Xunit;
