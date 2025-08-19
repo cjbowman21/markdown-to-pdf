@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
-using MarkdownToPdf.Web.Services;
+using MarkdownToPdf.Core.Services;
 using Xunit;
 
 namespace MarkdownToPdf.Tests;

@@ -1,4 +1,4 @@
-using MarkdownToPdf.Web.Services;
+using MarkdownToPdf.Core.Services;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);

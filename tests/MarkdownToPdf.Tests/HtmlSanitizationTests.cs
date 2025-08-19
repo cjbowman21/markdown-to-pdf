@@ -1,4 +1,4 @@
-using MarkdownToPdf.Web.Services;
+using MarkdownToPdf.Core.Services;
 using Xunit;
 
 namespace MarkdownToPdf.Tests;
