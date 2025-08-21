@@ -80,7 +80,7 @@
 
 ---
 
-## BNControl Questionnaire
+## Modules Questionnaire
 
 **Please indicate which features you would like more information on:**
 
@@ -147,7 +147,7 @@ ____ <!-- {{text:Sales.Additional3,width=540,overlay}} -->
 ## Official Checks
 
 - Official check printing platform: ____ <!-- {{text:Checks.Platform,width=320,overlay}} -->  
-- Print checks in BNControl? Yes ( ) <!-- {{radio:Checks.InBNControl,group:Checks.InBNControl,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Checks.InBNControl,group:Checks.InBNControl,value=No,overlay}} -->  More Information ( ) <!-- {{radio:Checks.InBNControl,group:Checks.InBNControl,value=MoreInfo,overlay}} -->  
+- Print checks in our software? Yes ( ) <!-- {{radio:Checks.InSoftware,group:Checks.InSoftware,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Checks.InSoftware,group:Checks.InSoftware,value=No,overlay}} -->  More Information ( ) <!-- {{radio:Checks.InSoftware,group:Checks.InSofware,value=MoreInfo,overlay}} -->  
 
 **Check Types Issued:**
 - [ ] <!-- {{check:Checks.Types.CashiersCheck,overlay}} --> Cashier’s Check  
@@ -236,6 +236,6 @@ ____ <!-- {{text:Sales.Additional3,width=540,overlay}} -->
 
 ### Client Workstations
 
-- [ ] Microsoft Windows 10 or 11 (32/64 bit)  
-- [ ] .NET 4.8 Framework  
-- [ ] Microsoft Excel 2016 or later  
+- Microsoft Windows 10 or 11 (32/64 bit)  
+- .NET 4.8 Framework  
+- Microsoft Excel 2016 or later  
