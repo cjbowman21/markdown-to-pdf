@@ -26,7 +26,16 @@ namespace MarkdownToPdf.Web.Controllers
 
         public IActionResult Index()
         {
-            var markdown = System.IO.File.ReadAllText(_samplePath);
+            string markdown;
+            if (System.IO.File.Exists(_samplePath))
+            {
+                markdown = System.IO.File.ReadAllText(_samplePath);
+            }
+            else
+            {
+                markdown = "Sample markdown file not found.";
+            }
+
             return View(model: markdown);
         }
 
