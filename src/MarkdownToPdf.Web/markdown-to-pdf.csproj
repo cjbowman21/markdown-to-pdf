@@ -11,4 +11,11 @@
     <ProjectReference Include="../MarkdownToPdf.Core/MarkdownToPdf.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Samples/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
