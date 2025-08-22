@@ -228,3 +228,8 @@ tr.highlight > th {
 code, pre, textarea {
   font-family: 'Courier New', monospace;
 }
+
+.modal-backdrop.show {
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
