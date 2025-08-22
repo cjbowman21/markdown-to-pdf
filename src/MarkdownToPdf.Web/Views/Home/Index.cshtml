@@ -5,15 +5,30 @@
 @model string
 
 <div class="mb-4">
-    <h2>Why use Markdown-to-PDF?</h2>
-    <p>Managing multiple versions of the same document is a nightmare. One update in Word, another in a PDF, and another in a fillable form — and suddenly your documents are out of sync.</p>
-    <ul>
-        <li><strong>Write once in Markdown</strong> – developer-friendly, version-controllable, and fast.</li>
-        <li><strong>Generate PDFs instantly</strong>, including fillable versions if needed.</li>
-        <li><strong>Stay consistent</strong> across all formats without duplicate edits.</li>
-        <li><strong>Move faster</strong> with lightweight docs that are easy to revise.</li>
-    </ul>
-    <p>Stop fighting with Word and duplicated PDFs. Keep your docs in Markdown, convert on demand, and never worry about mismatched versions again.</p>
+    <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#whyModal">
+        Why use Markdown-to-PDF?
+    </button>
+</div>
+
+<div class="modal fade" id="whyModal" tabindex="-1" aria-labelledby="whyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="whyModalLabel">Why use Markdown-to-PDF?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Managing multiple versions of the same document is a nightmare. One update in Word, another in a PDF, and another in a fillable form — and suddenly your documents are out of sync.</p>
+                <ul>
+                    <li><strong>Write once in Markdown</strong> – developer-friendly, version-controllable, and fast.</li>
+                    <li><strong>Generate PDFs instantly</strong>, including fillable versions if needed.</li>
+                    <li><strong>Stay consistent</strong> across all formats without duplicate edits.</li>
+                    <li><strong>Move faster</strong> with lightweight docs that are easy to revise.</li>
+                </ul>
+                <p>Stop fighting with Word and duplicated PDFs. Keep your docs in Markdown, convert on demand, and never worry about mismatched versions again.</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <ul class="nav nav-tabs d-md-none mb-3" id="mobileTabs">
