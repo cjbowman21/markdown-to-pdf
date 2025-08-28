@@ -45,7 +45,7 @@ namespace MarkdownToPdf.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(10 * 1024 * 1024)]
-        public async Task<IActionResult> GeneratePdf(string? markdown, string? fileName, IFormFile? letterheadPdf, bool applyOverlay = false)
+        public async Task<IActionResult> GeneratePdf(string? markdown, string? fileName, IFormFile? letterheadPdf, bool applyOverlay = false, float? offsetX = null, float? offsetY = null)
         {
             if (markdown == null)
             {
@@ -65,17 +65,19 @@ namespace MarkdownToPdf.Web.Controllers
             }
 
             var pipe = new Pipe();
+            var left = offsetX ?? 0f;
+            var top = offsetY ?? 0f;
             _ = Task.Run(async () =>
             {
                 await using var writerStream = pipe.Writer.AsStream();
                 if (backgroundBytes is not null && applyOverlay)
                 {
                     using var bgMs = new MemoryStream(backgroundBytes);
-                    await _markdownService.GeneratePdf(markdown!, writerStream, bgMs);
+                    await _markdownService.GeneratePdf(markdown!, writerStream, bgMs, left, top);
                 }
                 else
                 {
-                    await _markdownService.GeneratePdf(markdown!, writerStream);
+                    await _markdownService.GeneratePdf(markdown!, writerStream, null, left, top);
                 }
                 await pipe.Writer.CompleteAsync();
             });
@@ -104,7 +106,7 @@ namespace MarkdownToPdf.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(10 * 1024 * 1024)]
-        public async Task<IActionResult> PreviewPdf(string? markdown, IFormFile? letterheadPdf, bool applyOverlay = false)
+        public async Task<IActionResult> PreviewPdf(string? markdown, IFormFile? letterheadPdf, bool applyOverlay = false, float? offsetX = null, float? offsetY = null)
         {
             if (markdown == null)
             {
@@ -122,6 +124,8 @@ namespace MarkdownToPdf.Web.Controllers
                 backgroundBytes = ms.ToArray();
             }
 
+            var left = offsetX ?? 0f;
+            var top = offsetY ?? 0f;
             var pipe = new Pipe();
             _ = Task.Run(async () =>
             {
@@ -129,11 +133,11 @@ namespace MarkdownToPdf.Web.Controllers
                 if (applyOverlay && backgroundBytes is not null)
                 {
                     using var bgMs = new MemoryStream(backgroundBytes);
-                    await _markdownService.GeneratePdf(markdown!, writerStream, bgMs);
+                    await _markdownService.GeneratePdf(markdown!, writerStream, bgMs, left, top);
                 }
                 else
                 {
-                    await _markdownService.GeneratePdf(markdown!, writerStream);
+                    await _markdownService.GeneratePdf(markdown!, writerStream, null, left, top);
                 }
                 await pipe.Writer.CompleteAsync();
             });

@@ -4,6 +4,7 @@ using Ganss.Xss;
 using Markdig;
 using iText.Html2pdf;
 using iText.Kernel.Pdf;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace MarkdownToPdf.Core.Services;
@@ -11,7 +12,7 @@ namespace MarkdownToPdf.Core.Services;
 public interface IMarkdownService
 {
     string RenderHtml(string markdown, bool pdfMode);
-    Task GeneratePdf(string markdown, Stream outputStream, Stream? backgroundPdf = null);
+    Task GeneratePdf(string markdown, Stream outputStream, Stream? backgroundPdf = null, float offsetLeftPt = 0, float offsetTopPt = 0);
 }
 
 public class MarkdownService : IMarkdownService
@@ -41,21 +42,20 @@ public class MarkdownService : IMarkdownService
         return Sanitizer.Sanitize(html);
     }
 
-    public async Task GeneratePdf(string markdown, Stream outputStream, Stream? backgroundPdf = null)
+    public async Task GeneratePdf(string markdown, Stream outputStream, Stream? backgroundPdf = null, float offsetLeftPt = 0, float offsetTopPt = 0)
     {
         var htmlFragment = RenderHtml(markdown, true);
-        var html = $"<html><head><meta charset=\"utf-8\"/><style>html, body {{ background: transparent !important; }}</style></head><body>{htmlFragment}</body></html>";
-
-        // Fast path when no background/letterhead PDF is provided
-        if (backgroundPdf is null)
+        var css = "html, body { background: transparent !important; }";
+        if (Math.Abs(offsetLeftPt) > 0.001f || Math.Abs(offsetTopPt) > 0.001f)
         {
-            using var writer = new PdfWriter(outputStream);
-            writer.SetCloseStream(false);
-            var props = new ConverterProperties().SetCreateAcroForm(true);
-            HtmlConverter.ConvertToPdf(html, writer, props);
-            await outputStream.FlushAsync();
-            return;
+            var left = offsetLeftPt.ToString(CultureInfo.InvariantCulture);
+            var top = offsetTopPt.ToString(CultureInfo.InvariantCulture);
+            css += $" body {{ margin-left: {left}pt; margin-top: {top}pt; }}";
         }
+        var html = $"<html><head><meta charset=\"utf-8\"/><style>{css}</style></head><body>{htmlFragment}</body></html>";
+
+        // If no background is provided, we still run through the same pipeline
+        // so margin-based offsets apply consistently.
 
         // Convert HTML to a temporary PDF in-memory
         using var generatedPdfStream = new MemoryStream();
@@ -67,20 +67,24 @@ public class MarkdownService : IMarkdownService
         }
 
         // Prepare background stream (copy to memory to ensure seekability)
-        using var backgroundBuffer = new MemoryStream();
-        await backgroundPdf.CopyToAsync(backgroundBuffer);
-        backgroundBuffer.Position = 0;
+        MemoryStream? backgroundBuffer = null;
+        if (backgroundPdf is not null)
+        {
+            backgroundBuffer = new MemoryStream();
+            await backgroundPdf.CopyToAsync(backgroundBuffer);
+            backgroundBuffer.Position = 0;
+        }
 
         // Open documents for overlay
         generatedPdfStream.Position = 0;
         using var genDoc = new PdfDocument(new PdfReader(generatedPdfStream));
-        using var bgDoc = new PdfDocument(new PdfReader(backgroundBuffer));
+        using var bgDoc = backgroundBuffer is null ? null : new PdfDocument(new PdfReader(backgroundBuffer));
         using var outWriter = new PdfWriter(outputStream);
         outWriter.SetCloseStream(false);
         using var outDoc = new PdfDocument(outWriter);
 
         var genPages = genDoc.GetNumberOfPages();
-        var bgPages = bgDoc.GetNumberOfPages();
+        var bgPages = bgDoc?.GetNumberOfPages() ?? 0;
 
         for (int i = 1; i <= genPages; i++)
         {
@@ -88,7 +92,7 @@ public class MarkdownService : IMarkdownService
             var outPage = outDoc.AddNewPage(new iText.Kernel.Geom.PageSize(genPage.GetPageSize()));
             var canvas = new iText.Kernel.Pdf.Canvas.PdfCanvas(outPage);
 
-            if (bgPages > 0)
+            if (bgPages > 0 && bgDoc is not null)
             {
                 int bgIndex = bgPages == 1 ? 1 : Math.Min(i, bgPages);
                 var bgPage = bgDoc.GetPage(bgIndex);
@@ -113,6 +117,7 @@ public class MarkdownService : IMarkdownService
             }
 
             var genXObj = genPage.CopyAsFormXObject(outDoc);
+            // Content was already offset via CSS margins; draw at (0,0)
             canvas.AddXObjectAt(genXObj, 0, 0);
         }
 

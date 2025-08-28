@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const applyOverlayCheckbox = document.getElementById('applyOverlay');
     const letterheadInput = document.getElementById('letterheadPdf');
     const removeLetterheadBtn = document.getElementById('removeLetterhead');
+    const offsetTopHidden = document.getElementById('offsetY');
+    const offsetLeftHidden = document.getElementById('offsetX');
+    const offsetTopDisplay = document.getElementById('offsetYDisplay');
+    const offsetLeftDisplay = document.getElementById('offsetXDisplay');
+    const offsetTopUnit = document.getElementById('offsetYUnit');
+    const offsetLeftUnit = document.getElementById('offsetXUnit');
     const previewScroll = preview;
     const editorPane = document.getElementById('editorPane');
     const previewPane = document.getElementById('previewPane');
@@ -213,19 +219,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Submit the form to the preview endpoint only when letterhead changes
     const form = document.getElementById('pdfForm');
+
+    // Unit conversion helpers for offset inputs
+    function toPoints(value, unit) {
+        const v = parseFloat(value || '0');
+        if (!isFinite(v)) return 0;
+        switch ((unit || 'pt').toLowerCase()) {
+            case 'in': return v * 72.0;
+            case 'mm': return v * (72.0 / 25.4);
+            default: return v; // pt
+        }
+    }
+    function updateOffsetsHidden() {
+        if (offsetTopHidden && offsetTopDisplay && offsetTopUnit) {
+            offsetTopHidden.value = String(toPoints(offsetTopDisplay.value, offsetTopUnit.value));
+        }
+        if (offsetLeftHidden && offsetLeftDisplay && offsetLeftUnit) {
+            offsetLeftHidden.value = String(toPoints(offsetLeftDisplay.value, offsetLeftUnit.value));
+        }
+    }
     function updatePdfStatus() {
         if (!pdfStatus) return;
         const fileName = (letterheadInput && letterheadInput.files && letterheadInput.files.length > 0)
             ? letterheadInput.files[0].name
             : 'None';
         const applied = (applyOverlayCheckbox && applyOverlayCheckbox.checked) ? 'On' : 'Off';
-        // Normalize status text to avoid hidden control characters
-        try { pdfStatus.textContent = 'Background: ' + fileName + ' | Apply Background: ' + applied; } catch {}
-        pdfStatus.textContent = `Background: ${fileName} • Apply Background: ${applied}`;
+        pdfStatus.textContent = 'Background: ' + fileName + ' | Apply Background: ' + applied;
     }
 
     function submitPdfPreview() {
         if (!form || !pdfPreview) return;
+        // Ensure hidden point values reflect UI units
+        try { updateOffsetsHidden && updateOffsetsHidden(); } catch {}
         const originalAction = form.getAttribute('action');
         const originalTarget = form.getAttribute('target');
         // Target the iframe and hit the PreviewPdf action
@@ -266,6 +291,27 @@ document.addEventListener('DOMContentLoaded', () => {
             submitPdfPreview();
         });
     }
+    function onOffsetChanged() {
+        // Refresh preview when offsets change
+        try { updateOffsetsHidden && updateOffsetsHidden(); } catch {}
+        pdfModeTab.click();
+        // debounce quickly to avoid double-submits on spinner clicks
+        if (pdfRefreshTimer) clearTimeout(pdfRefreshTimer);
+        pdfRefreshTimer = setTimeout(() => {
+            submitPdfPreview();
+            pdfRefreshTimer = null;
+        }, 300);
+    }
+    if (offsetTopDisplay) {
+        offsetTopDisplay.addEventListener('input', onOffsetChanged);
+        offsetTopDisplay.addEventListener('change', onOffsetChanged);
+    }
+    if (offsetLeftDisplay) {
+        offsetLeftDisplay.addEventListener('input', onOffsetChanged);
+        offsetLeftDisplay.addEventListener('change', onOffsetChanged);
+    }
+    if (offsetTopUnit) offsetTopUnit.addEventListener('change', onOffsetChanged);
+    if (offsetLeftUnit) offsetLeftUnit.addEventListener('change', onOffsetChanged);
     if (removeLetterheadBtn && letterheadInput) {
         removeLetterheadBtn.addEventListener('click', () => {
             // Clear the selected file and refresh preview without background
@@ -276,5 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     updatePreview();
+    try { updateOffsetsHidden && updateOffsetsHidden(); } catch {}
     updatePdfStatus();
 });
