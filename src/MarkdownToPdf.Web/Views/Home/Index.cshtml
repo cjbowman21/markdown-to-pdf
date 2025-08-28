@@ -4,33 +4,6 @@
 
 @model string
 
-<div class="mb-4">
-    <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#whyModal">
-        Why use Markdown-to-PDF?
-    </button>
-</div>
-
-<div class="modal fade" id="whyModal" tabindex="-1" aria-labelledby="whyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="whyModalLabel">Why use Markdown-to-PDF?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Managing multiple versions of the same document is a nightmare. One update in Word, another in a PDF, and another in a fillable form — and suddenly your documents are out of sync.</p>
-                <ul>
-                    <li><strong>Write once in Markdown</strong> – developer-friendly, version-controllable, and fast.</li>
-                    <li><strong>Generate PDFs instantly</strong>, including fillable versions if needed.</li>
-                    <li><strong>Stay consistent</strong> across all formats without duplicate edits.</li>
-                    <li><strong>Move faster</strong> with lightweight docs that are easy to revise.</li>
-                </ul>
-                <p>Stop fighting with Word and duplicated PDFs. Keep your docs in Markdown, convert on demand, and never worry about mismatched versions again.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <ul class="nav nav-tabs d-md-none mb-3" id="mobileTabs">
     <li class="nav-item">
         <button class="nav-link active" id="editor-tab" type="button">Editor</button>
@@ -82,8 +55,48 @@
             <li class="nav-item">
                 <button class="nav-link" id="pdfModeTab" type="button">PDF</button>
             </li>
+            <li class="nav-item">
+                <button class="nav-link" id="whyModeTab" type="button">WHY/HOW</button>
+            </li>
         </ul>
         <div id="preview" class="surface p-3 flex-grow-1 overflow-auto"></div>
+        <div id="whyContent" class="surface p-3 flex-grow-1 overflow-auto d-none">
+            <h5>Why use Markdown-to-PDF?</h5>
+            <p>Managing multiple versions of the same document is a nightmare. One update in Word, another in a PDF, and another in a fillable form — and suddenly your documents are out of sync.</p>
+            <ul>
+                <li><strong>Write once in Markdown</strong> – developer-friendly, version-controllable, and fast.</li>
+                <li><strong>Generate PDFs instantly</strong>, including fillable versions if needed.</li>
+                <li><strong>Stay consistent</strong> across all formats without duplicate edits.</li>
+                <li><strong>Move faster</strong> with lightweight docs that are easy to revise.</li>
+            </ul>
+            <p>Stop fighting with Word and duplicated PDFs. Keep your docs in Markdown, convert on demand, and never worry about mismatched versions again.</p>
+            <h5 class="mt-4">How to add fillable fields</h5>
+            <p>Use the snippets below to create interactive elements in your PDF. Click <em>Copy</em> to add them to your markdown.</p>
+            <div class="mb-3">
+                <div class="d-flex align-items-start">
+                    <pre class="flex-grow-1 bg-light p-2"><code id="textExample">Name: ____ &lt;!-- {{text:Contact.Name,width=200,overlay}} --&gt;</code></pre>
+                    <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="textExample">Copy</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="d-flex align-items-start">
+                    <pre class="flex-grow-1 bg-light p-2"><code id="checkExample">- Accept terms [ ] &lt;!-- {{check:AcceptTerms,overlay}} --&gt;</code></pre>
+                    <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="checkExample">Copy</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="d-flex align-items-start">
+                    <pre class="flex-grow-1 bg-light p-2"><code id="radioExample">Remote or on-location: Remote ( ) &lt;!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=Remote,overlay}} --&gt; On-Location ( ) &lt;!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=OnLocation,overlay}} --&gt;</code></pre>
+                    <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="radioExample">Copy</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="d-flex align-items-start">
+                    <pre class="flex-grow-1 bg-light p-2"><code id="pageExample">&lt;!-- {{ pagebreak }} --&gt;</code></pre>
+                    <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="pageExample">Copy</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

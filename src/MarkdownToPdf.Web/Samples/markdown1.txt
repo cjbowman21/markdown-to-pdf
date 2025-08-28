@@ -1,46 +1,12 @@
-# Fillable Questionnaire
-**123 S. Main St., Suite A**  
-**Springfield, NY 12345**  
-**555.123.1234 Toll Free**  
-**support@software-company.com**  
-**www.software-company.com**
+# Sample Markdown
 
----
+## Contact
+**Name:** ____ <!-- {{text:Contact.Name,width=200,overlay}} -->
 
-## Contacts
-
-**Chief Executive Officer:** ____ <!-- {{text:Contacts.CEO.Name,width=300,overlay}} -->
- * Email: ____ <!-- {{text:Contacts.CEO.Email,width=250,overlay}} -->
- * Phone: ____ <!-- {{text:Contacts.CEO.Phone,width=160,overlay}} -->  
-
-**President:** ____ <!-- {{text:Contacts.President.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.President.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.President.Phone,width=160,overlay}} -->  
-
----
-
-## Questions
-
-### Company Details
-- Location: ____ <!-- {{text:Questions.CompanyDetails.Location,width=300,overlay}} -->  
-- Remote or on-location: Remote ( ) <!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=Remote,overlay}} -->  On-Location ( ) <!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=OnLocation,overlay}} -->  
----
-
-## Modules Questionnaire
-
-**Please indicate the areas you have expertise in:**
-
-| Area                     | Proficient        |
-|--------------------------|-------------------|
-| SQL                      | [ ] <!-- {{check:Areas.SQL,overlay}} --> |
-| .NET                     | [ ] <!-- {{check:Areas.NET,overlay}} --> |
-| JavaScript               | [ ] <!-- {{check:Areas.JavaScript,overlay}} --> |
-| Git                      | [ ] <!-- {{check:Areas.Git,overlay}} --> |
-
-
----
+## Preferences
+- Remote or on-location: Remote ( ) <!-- {{radio:Company.Type,group=Company.Type,value=Remote,overlay}} --> On-Location ( ) <!-- {{radio:Company.Type,group=Company.Type,value=OnLocation,overlay}} -->
+- Git experience? [ ] <!-- {{check:Skills.Git,overlay}} -->
 
 <!-- {{ pagebreak }} -->
-
-More details after page break
+More after page break
 

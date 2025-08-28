@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewTab = document.getElementById('preview-tab');
     const htmlModeTab = document.getElementById('htmlModeTab');
     const pdfModeTab = document.getElementById('pdfModeTab');
-    if (!input || !preview || !editorTab || !previewTab || !htmlModeTab || !pdfModeTab) {
+    const whyModeTab = document.getElementById('whyModeTab');
+    const whyContent = document.getElementById('whyContent');
+    if (!input || !preview || !editorTab || !previewTab || !htmlModeTab || !pdfModeTab || !whyModeTab || !whyContent) {
         return;
     }
     let previewMode = 'html';
@@ -103,13 +105,26 @@ document.addEventListener('DOMContentLoaded', () => {
         previewMode = 'html';
         htmlModeTab.classList.add('active');
         pdfModeTab.classList.remove('active');
+        whyModeTab.classList.remove('active');
+        whyContent.classList.add('d-none');
+        preview.classList.remove('d-none');
         updatePreview();
     });
     pdfModeTab.addEventListener('click', () => {
         previewMode = 'pdf';
         pdfModeTab.classList.add('active');
         htmlModeTab.classList.remove('active');
+        whyModeTab.classList.remove('active');
+        whyContent.classList.add('d-none');
+        preview.classList.remove('d-none');
         updatePreview();
+    });
+    whyModeTab.addEventListener('click', () => {
+        whyModeTab.classList.add('active');
+        htmlModeTab.classList.remove('active');
+        pdfModeTab.classList.remove('active');
+        preview.classList.add('d-none');
+        whyContent.classList.remove('d-none');
     });
 
     input.addEventListener('scroll', () => {
@@ -153,6 +168,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     input.addEventListener('mouseleave', clearHighlight);
+
+    document.querySelectorAll('.copy-example').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-copy-target');
+            const text = document.getElementById(targetId)?.innerText;
+            if (text) {
+                navigator.clipboard.writeText(text.trim());
+                btn.textContent = 'Copied!';
+                setTimeout(() => (btn.textContent = 'Copy'), 2000);
+            }
+        });
+    });
 
     updatePreview();
 });
