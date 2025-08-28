@@ -21,6 +21,15 @@
   --color-highlight: rgba(96, 165, 250, 0.3);
 }
 
+/* Dark-mode override for Bootstrap's light backgrounds to preserve contrast */
+:root[data-theme='dark'] .bg-light,
+:root[data-theme='dark'] pre.bg-light,
+:root[data-theme='dark'] code.bg-light {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+
 html {
   font-size: 16px;
 }

@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('markdownInput');
     const preview = document.getElementById('preview');
+    const pdfPreview = document.getElementById('pdfPreview');
+    const pdfStatus = document.getElementById('pdfStatus');
+    const applyOverlayCheckbox = document.getElementById('applyOverlay');
+    const letterheadInput = document.getElementById('letterheadPdf');
+    const removeLetterheadBtn = document.getElementById('removeLetterhead');
     const previewScroll = preview;
     const editorPane = document.getElementById('editorPane');
     const previewPane = document.getElementById('previewPane');
@@ -14,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     let previewMode = 'html';
+    let pdfRefreshTimer = null;
     let lines = [];
     let elementMap = new Map();
     let syncingFromInput = false;
@@ -100,31 +106,55 @@ document.addEventListener('DOMContentLoaded', () => {
     editorTab.addEventListener('click', showEditor);
     previewTab.addEventListener('click', showPreview);
 
-    input.addEventListener('input', updatePreview);
+    input.addEventListener('input', () => {
+        updatePreview();
+        if (previewMode === 'pdf') {
+            if (pdfRefreshTimer) clearTimeout(pdfRefreshTimer);
+            pdfRefreshTimer = setTimeout(() => {
+                submitPdfPreview();
+                pdfRefreshTimer = null;
+            }, 800);
+        }
+    });
     htmlModeTab.addEventListener('click', () => {
         previewMode = 'html';
+        if (pdfRefreshTimer) { clearTimeout(pdfRefreshTimer); pdfRefreshTimer = null; }
         htmlModeTab.classList.add('active');
         pdfModeTab.classList.remove('active');
         whyModeTab.classList.remove('active');
         whyContent.classList.add('d-none');
         preview.classList.remove('d-none');
+        if (pdfPreview) pdfPreview.classList.add('d-none');
+        if (pdfStatus) pdfStatus.classList.add('d-none');
         updatePreview();
     });
     pdfModeTab.addEventListener('click', () => {
+        // Switch UI to PDF iframe view; do not re-render background unless the user selects a file
         previewMode = 'pdf';
         pdfModeTab.classList.add('active');
         htmlModeTab.classList.remove('active');
         whyModeTab.classList.remove('active');
         whyContent.classList.add('d-none');
-        preview.classList.remove('d-none');
-        updatePreview();
+        if (pdfPreview) pdfPreview.classList.remove('d-none');
+        preview.classList.add('d-none');
+        if (pdfStatus) {
+            updatePdfStatus();
+            pdfStatus.classList.remove('d-none');
+        }
+        // If no background is selected, render a plain PDF so the preview isn't empty
+        if (!letterheadInput || !letterheadInput.files || letterheadInput.files.length === 0) {
+            submitPdfPreview();
+        }
     });
     whyModeTab.addEventListener('click', () => {
+        if (pdfRefreshTimer) { clearTimeout(pdfRefreshTimer); pdfRefreshTimer = null; }
         whyModeTab.classList.add('active');
         htmlModeTab.classList.remove('active');
         pdfModeTab.classList.remove('active');
         preview.classList.add('d-none');
         whyContent.classList.remove('d-none');
+        if (pdfPreview) pdfPreview.classList.add('d-none');
+        if (pdfStatus) pdfStatus.classList.add('d-none');
     });
 
     input.addEventListener('scroll', () => {
@@ -181,5 +211,70 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Submit the form to the preview endpoint only when letterhead changes
+    const form = document.getElementById('pdfForm');
+    function updatePdfStatus() {
+        if (!pdfStatus) return;
+        const fileName = (letterheadInput && letterheadInput.files && letterheadInput.files.length > 0)
+            ? letterheadInput.files[0].name
+            : 'None';
+        const applied = (applyOverlayCheckbox && applyOverlayCheckbox.checked) ? 'On' : 'Off';
+        // Normalize status text to avoid hidden control characters
+        try { pdfStatus.textContent = 'Background: ' + fileName + ' | Apply Background: ' + applied; } catch {}
+        pdfStatus.textContent = `Background: ${fileName} • Apply Background: ${applied}`;
+    }
+
+    function submitPdfPreview() {
+        if (!form || !pdfPreview) return;
+        const originalAction = form.getAttribute('action');
+        const originalTarget = form.getAttribute('target');
+        // Target the iframe and hit the PreviewPdf action
+        form.setAttribute('target', 'pdfPreview');
+        // Build a preview URL based on current action
+        try {
+            const url = new URL(form.action, window.location.origin);
+            url.pathname = url.pathname.replace(/GeneratePdf$/i, 'PreviewPdf');
+            form.setAttribute('action', url.toString());
+        } catch {
+            form.setAttribute('action', '/Home/PreviewPdf');
+        }
+        form.submit();
+        // Restore attributes immediately after submit
+        if (originalAction) form.setAttribute('action', originalAction); else form.removeAttribute('action');
+        if (originalTarget) form.setAttribute('target', originalTarget); else form.removeAttribute('target');
+        updatePdfStatus();
+    }
+
+    if (letterheadInput) {
+        letterheadInput.addEventListener('change', () => {
+            // If a background file is selected, show PDF tab and refresh preview
+            if (letterheadInput.files && letterheadInput.files.length > 0) {
+                pdfModeTab.click();
+                submitPdfPreview();
+            }
+            else {
+                // No file selected; if user cleared via dialog, update status and preview
+                pdfModeTab.click();
+                submitPdfPreview();
+            }
+        });
+    }
+    if (applyOverlayCheckbox) {
+        applyOverlayCheckbox.addEventListener('change', () => {
+            // Always refresh the PDF preview when overlay toggle changes
+            pdfModeTab.click();
+            submitPdfPreview();
+        });
+    }
+    if (removeLetterheadBtn && letterheadInput) {
+        removeLetterheadBtn.addEventListener('click', () => {
+            // Clear the selected file and refresh preview without background
+            letterheadInput.value = '';
+            pdfModeTab.click();
+            submitPdfPreview();
+        });
+    }
+
     updatePreview();
+    updatePdfStatus();
 });

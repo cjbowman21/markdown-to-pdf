@@ -44,8 +44,8 @@ namespace MarkdownToPdf.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RequestSizeLimit(2 * 1024 * 1024)]
-        public async Task<IActionResult> GeneratePdf(string? markdown, string? fileName)
+        [RequestSizeLimit(10 * 1024 * 1024)]
+        public async Task<IActionResult> GeneratePdf(string? markdown, string? fileName, IFormFile? letterheadPdf, bool applyOverlay = false)
         {
             if (markdown == null)
             {
@@ -54,11 +54,29 @@ namespace MarkdownToPdf.Web.Controllers
                 markdown = await reader.ReadToEndAsync();
             }
 
+            // If a letterhead/background PDF is provided, buffer it so the async writer can use it safely
+            byte[]? backgroundBytes = null;
+            if (letterheadPdf is not null && letterheadPdf.Length > 0)
+            {
+                await using var bgStream = letterheadPdf.OpenReadStream();
+                using var ms = new MemoryStream();
+                await bgStream.CopyToAsync(ms);
+                backgroundBytes = ms.ToArray();
+            }
+
             var pipe = new Pipe();
             _ = Task.Run(async () =>
             {
                 await using var writerStream = pipe.Writer.AsStream();
-                await _markdownService.GeneratePdf(markdown!, writerStream);
+                if (backgroundBytes is not null && applyOverlay)
+                {
+                    using var bgMs = new MemoryStream(backgroundBytes);
+                    await _markdownService.GeneratePdf(markdown!, writerStream, bgMs);
+                }
+                else
+                {
+                    await _markdownService.GeneratePdf(markdown!, writerStream);
+                }
                 await pipe.Writer.CompleteAsync();
             });
 
@@ -81,6 +99,50 @@ namespace MarkdownToPdf.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [RequestSizeLimit(10 * 1024 * 1024)]
+        public async Task<IActionResult> PreviewPdf(string? markdown, IFormFile? letterheadPdf, bool applyOverlay = false)
+        {
+            if (markdown == null)
+            {
+                await using var fs = new FileStream(_samplePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+                using var reader = new StreamReader(fs);
+                markdown = await reader.ReadToEndAsync();
+            }
+
+            byte[]? backgroundBytes = null;
+            if (letterheadPdf is not null && letterheadPdf.Length > 0)
+            {
+                await using var bgStream = letterheadPdf.OpenReadStream();
+                using var ms = new MemoryStream();
+                await bgStream.CopyToAsync(ms);
+                backgroundBytes = ms.ToArray();
+            }
+
+            var pipe = new Pipe();
+            _ = Task.Run(async () =>
+            {
+                await using var writerStream = pipe.Writer.AsStream();
+                if (applyOverlay && backgroundBytes is not null)
+                {
+                    using var bgMs = new MemoryStream(backgroundBytes);
+                    await _markdownService.GeneratePdf(markdown!, writerStream, bgMs);
+                }
+                else
+                {
+                    await _markdownService.GeneratePdf(markdown!, writerStream);
+                }
+                await pipe.Writer.CompleteAsync();
+            });
+
+            // Allow embedding this PDF in an iframe on same-origin
+            Response.Headers["X-Frame-Options"] = "SAMEORIGIN";
+            Response.Headers["Content-Security-Policy"] = "frame-ancestors 'self'";
+
+            return new FileStreamResult(pipe.Reader.AsStream(), "application/pdf");
         }
 
         [HttpPost]

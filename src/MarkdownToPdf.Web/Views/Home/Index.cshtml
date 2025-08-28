@@ -15,7 +15,7 @@
 
 <div class="row">
     <div class="col-md-6 d-md-block" id="editorPane">
-        <form method="post" asp-action="GeneratePdf" id="pdfForm" class="h-100 d-flex flex-column">
+        <form method="post" asp-action="GeneratePdf" id="pdfForm" class="h-100 d-flex flex-column" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <ul class="nav nav-tabs mb-2" id="editorTabs" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -59,7 +59,9 @@
                 <button class="nav-link" id="whyModeTab" type="button">WHY/HOW</button>
             </li>
         </ul>
+        <div id="pdfStatus" class="small text-muted d-none mb-1"></div>
         <div id="preview" class="surface p-3 flex-grow-1 overflow-auto"></div>
+        <iframe id="pdfPreview" name="pdfPreview" class="surface flex-grow-1 overflow-auto d-none" style="width: 100%; height: 100%; border: 0;" title="PDF preview"></iframe>
         <div id="whyContent" class="surface p-3 flex-grow-1 overflow-auto d-none">
             <h5>Why use Markdown-to-PDF?</h5>
             <p>Managing multiple versions of the same document is a nightmare. One update in Word, another in a PDF, and another in a fillable form — and suddenly your documents are out of sync.</p>
@@ -74,25 +76,25 @@
             <p>Use the snippets below to create interactive elements in your PDF. Click <em>Copy</em> to add them to your markdown.</p>
             <div class="mb-3">
                 <div class="d-flex align-items-start">
-                    <pre class="flex-grow-1 bg-light p-2"><code id="textExample">Name: ____ &lt;!-- {{text:Contact.Name,width=200,overlay}} --&gt;</code></pre>
+                    <pre class="flex-grow-1 surface p-2"><code id="textExample">Name: ____ &lt;!-- {{text:Contact.Name,width=200,overlay}} --&gt;</code></pre>
                     <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="textExample">Copy</button>
                 </div>
             </div>
             <div class="mb-3">
                 <div class="d-flex align-items-start">
-                    <pre class="flex-grow-1 bg-light p-2"><code id="checkExample">- Accept terms [ ] &lt;!-- {{check:AcceptTerms,overlay}} --&gt;</code></pre>
+                    <pre class="flex-grow-1 surface p-2"><code id="checkExample">- Accept terms [ ] &lt;!-- {{check:AcceptTerms,overlay}} --&gt;</code></pre>
                     <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="checkExample">Copy</button>
                 </div>
             </div>
             <div class="mb-3">
                 <div class="d-flex align-items-start">
-                    <pre class="flex-grow-1 bg-light p-2"><code id="radioExample">Remote or on-location: Remote ( ) &lt;!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=Remote,overlay}} --&gt; On-Location ( ) &lt;!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=OnLocation,overlay}} --&gt;</code></pre>
+                    <pre class="flex-grow-1 surface p-2"><code id="radioExample">Remote or on-location: Remote ( ) &lt;!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=Remote,overlay}} --&gt; On-Location ( ) &lt;!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=OnLocation,overlay}} --&gt;</code></pre>
                     <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="radioExample">Copy</button>
                 </div>
             </div>
             <div class="mb-3">
                 <div class="d-flex align-items-start">
-                    <pre class="flex-grow-1 bg-light p-2"><code id="pageExample">&lt;!-- {{ pagebreak }} --&gt;</code></pre>
+                    <pre class="flex-grow-1 surface p-2"><code id="pageExample">&lt;!-- {{ pagebreak }} --&gt;</code></pre>
                     <button class="btn btn-outline-secondary btn-sm ms-2 copy-example" data-copy-target="pageExample">Copy</button>
                 </div>
             </div>
@@ -104,9 +106,27 @@
     <footer class="fixed-bottom surface border-top p-3">
         <div class="container-fluid">
             <div class="collapse d-md-block mb-2" id="optionsCollapse">
-                <div class="d-flex align-items-center">
-                    <label for="fileName" class="form-label mb-0 me-2">Filename:</label>
-                    <input type="text" id="fileName" name="fileName" form="pdfForm" class="form-control form-control-sm" placeholder="document" />
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <label for="fileName" class="form-label mb-0 me-2">Filename:</label>
+                        <input type="text" id="fileName" name="fileName" form="pdfForm" class="form-control form-control-sm" placeholder="document" />
+                    </div>
+                    <div class="col-md-5 d-flex align-items-center">
+                        <label for="letterheadPdf" class="form-label mb-0 me-2">Add Background:</label>
+                        <input type="file" id="letterheadPdf" name="letterheadPdf" form="pdfForm" class="form-control form-control-sm" accept=".pdf" />
+                        <button type="button" id="removeLetterhead" class="btn btn-outline-secondary btn-sm ms-2">Remove</button>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="true" id="applyOverlay" name="applyOverlay" form="pdfForm" checked>
+                            <label class="form-check-label" for="applyOverlay">
+                                Apply Background
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-text">If added, the generated PDF is drawn on top of the background. One-page backgrounds repeat on all pages; multi-page backgrounds map page-by-page.</div>
+                    </div>
                 </div>
             </div>
             <div class="d-flex justify-content-end align-items-center">

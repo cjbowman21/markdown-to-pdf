@@ -11,7 +11,7 @@ namespace MarkdownToPdf.Core.Services;
 public interface IMarkdownService
 {
     string RenderHtml(string markdown, bool pdfMode);
-    Task GeneratePdf(string markdown, Stream outputStream);
+    Task GeneratePdf(string markdown, Stream outputStream, Stream? backgroundPdf = null);
 }
 
 public class MarkdownService : IMarkdownService
@@ -41,13 +41,81 @@ public class MarkdownService : IMarkdownService
         return Sanitizer.Sanitize(html);
     }
 
-    public async Task GeneratePdf(string markdown, Stream outputStream)
+    public async Task GeneratePdf(string markdown, Stream outputStream, Stream? backgroundPdf = null)
     {
-        var html = RenderHtml(markdown, true);
-        using var writer = new PdfWriter(outputStream);
-        writer.SetCloseStream(false);
-        var props = new ConverterProperties().SetCreateAcroForm(true);
-        HtmlConverter.ConvertToPdf(html, writer, props);
+        var htmlFragment = RenderHtml(markdown, true);
+        var html = $"<html><head><meta charset=\"utf-8\"/><style>html, body {{ background: transparent !important; }}</style></head><body>{htmlFragment}</body></html>";
+
+        // Fast path when no background/letterhead PDF is provided
+        if (backgroundPdf is null)
+        {
+            using var writer = new PdfWriter(outputStream);
+            writer.SetCloseStream(false);
+            var props = new ConverterProperties().SetCreateAcroForm(true);
+            HtmlConverter.ConvertToPdf(html, writer, props);
+            await outputStream.FlushAsync();
+            return;
+        }
+
+        // Convert HTML to a temporary PDF in-memory
+        using var generatedPdfStream = new MemoryStream();
+        using (var tempWriter = new PdfWriter(generatedPdfStream))
+        {
+            tempWriter.SetCloseStream(false);
+            var props = new ConverterProperties().SetCreateAcroForm(true);
+            HtmlConverter.ConvertToPdf(html, tempWriter, props);
+        }
+
+        // Prepare background stream (copy to memory to ensure seekability)
+        using var backgroundBuffer = new MemoryStream();
+        await backgroundPdf.CopyToAsync(backgroundBuffer);
+        backgroundBuffer.Position = 0;
+
+        // Open documents for overlay
+        generatedPdfStream.Position = 0;
+        using var genDoc = new PdfDocument(new PdfReader(generatedPdfStream));
+        using var bgDoc = new PdfDocument(new PdfReader(backgroundBuffer));
+        using var outWriter = new PdfWriter(outputStream);
+        outWriter.SetCloseStream(false);
+        using var outDoc = new PdfDocument(outWriter);
+
+        var genPages = genDoc.GetNumberOfPages();
+        var bgPages = bgDoc.GetNumberOfPages();
+
+        for (int i = 1; i <= genPages; i++)
+        {
+            var genPage = genDoc.GetPage(i);
+            var outPage = outDoc.AddNewPage(new iText.Kernel.Geom.PageSize(genPage.GetPageSize()));
+            var canvas = new iText.Kernel.Pdf.Canvas.PdfCanvas(outPage);
+
+            if (bgPages > 0)
+            {
+                int bgIndex = bgPages == 1 ? 1 : Math.Min(i, bgPages);
+                var bgPage = bgDoc.GetPage(bgIndex);
+                var bgSize = bgPage.GetPageSize();
+                var genSize = genPage.GetPageSize();
+                var bgXObj = bgPage.CopyAsFormXObject(outDoc);
+
+                // Scale background to generated page size if needed
+                float scaleX = genSize.GetWidth() / bgSize.GetWidth();
+                float scaleY = genSize.GetHeight() / bgSize.GetHeight();
+                if (Math.Abs(scaleX - 1f) > 0.001f || Math.Abs(scaleY - 1f) > 0.001f)
+                {
+                    canvas.SaveState();
+                    canvas.ConcatMatrix(scaleX, 0, 0, scaleY, 0, 0);
+                    canvas.AddXObjectAt(bgXObj, 0, 0);
+                    canvas.RestoreState();
+                }
+                else
+                {
+                    canvas.AddXObjectAt(bgXObj, 0, 0);
+                }
+            }
+
+            var genXObj = genPage.CopyAsFormXObject(outDoc);
+            canvas.AddXObjectAt(genXObj, 0, 0);
+        }
+
         await outputStream.FlushAsync();
     }
 
