@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Sitemap: https://md-pdf.azurewebsites.net/sitemap.xml
+Sitemap: /sitemap.xml
+

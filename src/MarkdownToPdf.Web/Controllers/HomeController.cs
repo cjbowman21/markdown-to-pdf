@@ -36,6 +36,9 @@ namespace MarkdownToPdf.Web.Controllers
                 markdown = "Sample markdown file not found.";
             }
 
+            ViewData["Title"] = "Markdown to PDF Converter";
+            ViewData["Description"] = "Free, fast Markdown to PDF converter with live preview. Paste Markdown or upload a file and generate a clean PDF.";
+
             return View(model: markdown);
         }
 

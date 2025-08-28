@@ -3,9 +3,48 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MarkdownToPdf.Web</title>
+    @{ var pageTitle = (ViewData["Title"] as string) ?? "Markdown to PDF Converter"; }
+    <title>@pageTitle - MarkdownToPdf.Web</title>
+    @{ var pageDescription = (ViewData["Description"] as string) ?? "Convert Markdown to PDF quickly with a simple online editor and preview."; }
+    <meta name="description" content="@pageDescription" />
+
+    @{
+        var req = Context?.Request;
+        var canonical = (ViewData["Canonical"] as string);
+        if (string.IsNullOrWhiteSpace(canonical) && req is not null)
+        {
+            canonical = $"{req.Scheme}://{req.Host}{req.Path}";
+        }
+    }
+    @if (!string.IsNullOrWhiteSpace(canonical))
+    {
+        <link rel="canonical" href="@canonical" />
+    }
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@pageTitle" />
+    <meta property="og:description" content="@pageDescription" />
+    @if (!string.IsNullOrWhiteSpace(canonical))
+    {
+        <meta property="og:url" content="@canonical" />
+    }
+    @if (ViewData["OgImage"] is string ogImage && !string.IsNullOrWhiteSpace(ogImage))
+    {
+        <meta property="og:image" content="@ogImage" />
+    }
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@pageTitle" />
+    <meta name="twitter:description" content="@pageDescription" />
+    @if (ViewData["OgImage"] is string twImage && !string.IsNullOrWhiteSpace(twImage))
+    {
+        <meta name="twitter:image" content="@twImage" />
+    }
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await Html.PartialAsync("_SeoJsonLd")
 </head>
 <body>
     <header>

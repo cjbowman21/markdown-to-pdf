@@ -1,0 +1,32 @@
+@{
+    var cspNonce = Context?.Items["CspNonce"] as string;
+    var req = Context?.Request;
+    var title = (ViewData["Title"] as string) ?? "Markdown to PDF Converter";
+    var description = (ViewData["Description"] as string) ?? "Convert Markdown to PDF quickly with a simple online editor and preview.";
+    var url = (ViewData["Canonical"] as string);
+    if (string.IsNullOrWhiteSpace(url) && req is not null)
+    {
+        url = $"{req.Scheme}://{req.Host}{req.Path}";
+    }
+
+    // If a full JSON-LD payload is provided, render it directly; otherwise output a basic SoftwareApplication schema.
+    var jsonLdOverride = ViewData["JsonLd"] as string;
+}
+@if (!string.IsNullOrWhiteSpace(jsonLdOverride))
+{
+    <script type="application/ld+json" nonce="@cspNonce">@Html.Raw(jsonLdOverride)</script>
+}
+else if (!string.IsNullOrWhiteSpace(url))
+{
+    <script type="application/ld+json" nonce="@cspNonce">
+        {
+          "@@context": "https://schema.org",
+          "@@type": "SoftwareApplication",
+          "name": "@title",
+          "applicationCategory": "UtilityApplication",
+          "operatingSystem": "Any",
+          "description": "@description",
+          "url": "@url"
+        }
+    </script>
+}
