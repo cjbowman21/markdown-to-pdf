@@ -15,6 +15,6 @@ public class RequestValidationTests
         var attr = method!.GetCustomAttribute<RequestSizeLimitAttribute>();
         Assert.NotNull(attr);
         var metadata = (IRequestSizeLimitMetadata)attr!;
-        Assert.Equal(2 * 1024 * 1024, metadata.MaxRequestBodySize);
+        Assert.Equal(10 * 1024 * 1024, metadata.MaxRequestBodySize);
     }
 }
