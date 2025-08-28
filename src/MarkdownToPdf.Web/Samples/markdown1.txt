@@ -1,13 +1,13 @@
-# General Questionnaire  
+# Fillable Questionnaire
 **123 S. Main St., Suite A**  
-**Springfield, TN 55555**  
-**877.123.1234 Toll Free**  
+**Springfield, NY 12345**  
+**555.123.1234 Toll Free**  
 **support@software-company.com**  
 **www.software-company.com**
 
 ---
 
-## Contact Questionnaire
+## Contacts
 
 **Chief Executive Officer:** ____ <!-- {{text:Contacts.CEO.Name,width=300,overlay}} -->
  * Email: ____ <!-- {{text:Contacts.CEO.Email,width=250,overlay}} -->
@@ -17,225 +17,30 @@
  * Email: ____ <!-- {{text:Contacts.President.Email,width=250,overlay}} --> 
  * Phone: ____ <!-- {{text:Contacts.President.Phone,width=160,overlay}} -->  
 
-**Chief Operations Officer:** ____ <!-- {{text:Contacts.COO.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.COO.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.COO.Phone,width=160,overlay}} -->  
-
-**Chief Financial Officer:** ____ <!-- {{text:Contacts.CFO.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.CFO.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.CFO.Phone,width=160,overlay}} -->  
-
-**Senior Credit Officer:** ____ <!-- {{text:Contacts.SeniorCredit.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.SeniorCredit.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.SeniorCredit.Phone,width=160,overlay}} -->  
-
-**Senior Deposit Officer:** ____ <!-- {{text:Contacts.SeniorDeposit.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.SeniorDeposit.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.SeniorDeposit.Phone,width=160,overlay}} -->  
-
-**Compliance Officer:** ____ <!-- {{text:Contacts.Compliance.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.Compliance.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.Compliance.Phone,width=160,overlay}} -->  
-
-**BSA Officer:** ____ <!-- {{text:Contacts.BSA.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.BSA.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.BSA.Phone,width=160,overlay}} -->  
-
-**IT Director:** ____ <!-- {{text:Contacts.ITDirector.Name,width=300,overlay}} -->  
- * Email: ____ <!-- {{text:Contacts.ITDirector.Email,width=250,overlay}} --> 
- * Phone: ____ <!-- {{text:Contacts.ITDirector.Phone,width=160,overlay}} -->  
-
 ---
 
-## Platform Questionnaire
+## Questions
 
-### Core Processor
-- Core processor: ____ <!-- {{text:Platform.Core.Processor,width=300,overlay}} -->  
-- Processed in-house or service bureau: In-house ( ) <!-- {{radio:Platform.Core.Mode,group=Platform.Core.Mode,value=InHouse,overlay}} -->  Service bureau ( ) <!-- {{radio:Platform.Core.Mode,group=Platform.Core.Mode,value=ServiceBureau,overlay}} -->  
-- Core’s report writer: ____ <!-- {{text:Platform.Core.ReportWriter,width=300,overlay}} -->  
-
-### Cold Storage
-- Cold storage platform: ____ <!-- {{text:Platform.ColdStorage.Platform,width=300,overlay}} -->  
-
-### Teller Platform
-- Teller platform: ____ <!-- {{text:Platform.Teller.Platform,width=300,overlay}} -->  
-- Server resides in-house? Yes ( ) <!-- {{radio:Platform.Teller.ServerInHouse,group=Platform.Teller.ServerInHouse,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Platform.Teller.ServerInHouse,group=Platform.Teller.ServerInHouse,value=No,overlay}} -->  
-
-### Debit & ATM Card
-- Card processor: ____ <!-- {{text:Platform.Cards.Processor,width=300,overlay}} -->  
-
-### Internet Banking & Bill Pay
-- Internet banking platform: ____ <!-- {{text:Platform.InternetBanking.Platform,width=300,overlay}} -->  
-- Bill pay platform: ____ <!-- {{text:Platform.BillPay.Platform,width=300,overlay}} -->  
-
-### Investment Portfolio
-- Investment portfolio tracking/bond accounting managed by: ____ <!-- {{text:Platform.Investments.TrackingManager,width=320,overlay}} -->  
-- CD investments managed by: ____ <!-- {{text:Platform.Investments.CDManager,width=320,overlay}} -->  
-
-### Document Preparation
-- Loan document origination platform: ____ <!-- {{text:Platform.DocPrep.LoanPlatform,width=320,overlay}} -->  
-  - Server in-house? Yes ( ) <!-- {{radio:Platform.DocPrep.LoanServerInHouse,group=Platform.DocPrep.LoanServerInHouse,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Platform.DocPrep.LoanServerInHouse,group=Platform.DocPrep.LoanServerInHouse,value=No,overlay}} -->  
-- Deposit document origination platform: ____ <!-- {{text:Platform.DocPrep.DepositPlatform,width=320,overlay}} -->  
-  - Server in-house? Yes ( ) <!-- {{radio:Platform.DocPrep.DepositServerInHouse,group=Platform.DocPrep.DepositServerInHouse,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Platform.DocPrep.DepositServerInHouse,group=Platform.DocPrep.DepositServerInHouse,value=No,overlay}} -->  
-
+### Company Details
+- Location: ____ <!-- {{text:Questions.CompanyDetails.Location,width=300,overlay}} -->  
+- Remote or on-location: Remote ( ) <!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=Remote,overlay}} -->  On-Location ( ) <!-- {{radio:Questions.CompanyDetails.Type,group=Questions.CompanyDetails.Type,value=OnLocation,overlay}} -->  
 ---
 
 ## Modules Questionnaire
 
-**Please indicate which features you would like more information on:**
+**Please indicate the areas you have expertise in:**
 
-| Modules                  | Request More Info |
+| Area                     | Proficient        |
 |--------------------------|-------------------|
-| Audit Tracking           | [ ] <!-- {{check:Modules.AuditTracking,overlay}} --> |
-| Checks                   | [ ] <!-- {{check:Modules.Checks,overlay}} --> |
-| Compliance & BSA         | [ ] <!-- {{check:Modules.ComplianceBSA,overlay}} --> |
-| Excessive AOD Monitoring | [ ] <!-- {{check:Modules.ExcessiveAODMonitoring,overlay}} --> |
-| Financials               | [ ] <!-- {{check:Modules.Financials,overlay}} --> |
-| Flex Forms               | [ ] <!-- {{check:Modules.FlexForms,overlay}} --> |
-| Flex Letters             | [ ] <!-- {{check:Modules.FlexLetters,overlay}} --> |
-| Intranet                 | [ ] <!-- {{check:Modules.Intranet,overlay}} --> |
-| Lending                  | [ ] <!-- {{check:Modules.Lending,overlay}} --> |
-| Notes                    | [ ] <!-- {{check:Modules.Notes,overlay}} --> |
-| Red Flag Checklists      | [ ] <!-- {{check:Modules.RedFlagChecklists,overlay}} --> |
-| Referral Tracking        | [ ] <!-- {{check:Modules.ReferralTracking,overlay}} --> |
-| Relationship Pricing     | [ ] <!-- {{check:Modules.RelationshipPricing,overlay}} --> |
-| Vendor Management        | [ ] <!-- {{check:Modules.VendorManagement,overlay}} --> |
-| Wires                    | [ ] <!-- {{check:Modules.Wires,overlay}} --> |
+| SQL                      | [ ] <!-- {{check:Areas.SQL,overlay}} --> |
+| .NET                     | [ ] <!-- {{check:Areas.NET,overlay}} --> |
+| JavaScript               | [ ] <!-- {{check:Areas.JavaScript,overlay}} --> |
+| Git                      | [ ] <!-- {{check:Areas.Git,overlay}} --> |
+
 
 ---
 
-## Sales Opportunities
+<!-- {{ pagebreak }} -->
 
-**Tracking methods (examples: Tran Code #12, Core Field “Field Name”):**
+More details after page break
 
-- Electronic Statements: ____ <!-- {{text:Sales.EStatements,width=340,overlay}} -->  
-- Debit/ATM Card: ____ <!-- {{text:Sales.DebitAtm,width=340,overlay}} -->  
-- Internet Banking: ____ <!-- {{text:Sales.InternetBanking,width=340,overlay}} -->  
-- Mobile Banking: ____ <!-- {{text:Sales.MobileBanking,width=340,overlay}} -->  
-- Bill Pay: ____ <!-- {{text:Sales.BillPay,width=340,overlay}} -->  
-- Remote Deposit Capture: ____ <!-- {{text:Sales.RDC,width=340,overlay}} -->  
-- Merchant Services: ____ <!-- {{text:Sales.MerchantServices,width=340,overlay}} -->  
-- Mobile Deposit: ____ <!-- {{text:Sales.MobileDeposit,width=340,overlay}} -->  
-- Credit Card: ____ <!-- {{text:Sales.CreditCard,width=340,overlay}} -->  
-- Investments: ____ <!-- {{text:Sales.Investments,width=340,overlay}} -->  
-- Insurance: ____ <!-- {{text:Sales.Insurance,width=340,overlay}} -->  
-
-**Additional products or services to track:**  
-____ <!-- {{text:Sales.Additional1,width=540,overlay}} -->  
-____ <!-- {{text:Sales.Additional2,width=540,overlay}} -->  
-____ <!-- {{text:Sales.Additional3,width=540,overlay}} -->  
-
----
-
-## Automatic Overdraft (AOD)
-
-- AOD protection? Yes ( ) <!-- {{radio:AOD.HasProtection,group=AOD.HasProtection,value=Yes,overlay}} -->  No ( ) <!-- {{radio:AOD.HasProtection,group=AOD.HasProtection,value=No,overlay}} -->  
-- DDA product codes excluded: ____ <!-- {{text:AOD.ExcludedDDACodes,width=420,overlay}} -->  
-- Insufficient fund fee: ____ <!-- {{text:AOD.InsufficientFundFee,width=200,overlay}} -->  
-- Daily AOD charge limit: ____ <!-- {{text:AOD.DailyChargeLimit,width=200,overlay}} -->  
-- After how many letters should follow-up occur? ____ <!-- {{text:AOD.FollowUpAfterLetters,width=120,overlay}} -->  
-
----
-
-## FACTA Red Flags Checklist
-
-- Credit reports pulled from: ____ <!-- {{text:FACTA.CreditReportSource,width=360,overlay}} -->  
-- Risk reports for deposit accounts? Provider: ____ <!-- {{text:FACTA.DepositRiskProvider,width=360,overlay}} -->  
-
----
-
-## Official Checks
-
-- Official check printing platform: ____ <!-- {{text:Checks.Platform,width=320,overlay}} -->  
-- Print checks in our software? Yes ( ) <!-- {{radio:Checks.InSoftware,group:Checks.InSoftware,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Checks.InSoftware,group:Checks.InSoftware,value=No,overlay}} -->  More Information ( ) <!-- {{radio:Checks.InSoftware,group:Checks.InSofware,value=MoreInfo,overlay}} -->  
-
-**Check Types Issued:**
-- [ ] <!-- {{check:Checks.Types.CashiersCheck,overlay}} --> Cashier’s Check  
-- [ ] <!-- {{check:Checks.Types.LoanDisbursement,overlay}} --> Loan Disbursement  
-- [ ] <!-- {{check:Checks.Types.MoneyOrder,overlay}} --> Money Order  
-- [ ] <!-- {{check:Checks.Types.CounterChecks,overlay}} --> Counter Checks  
-- Other: ____ <!-- {{text:Checks.Types.Other,width=260,overlay}} -->  
-
----
-
-## General
-
-- Email Server (IP or DNS): ____ <!-- {{text:General.Email.Server,width=320,overlay}} -->  
-- Requires Authentication for Internal Emails? Yes ( ) <!-- {{radio:General.Email.RequiresAuth,group=General.Email.RequiresAuth,value=Yes,overlay}} -->  No ( ) <!-- {{radio:General.Email.RequiresAuth,group=General.Email.RequiresAuth,value=No,overlay}} -->  
-- Username/Password (if required): ____ <!-- {{text:General.Email.Credentials,width=360,overlay}} -->  
-- Default teller drawer cash limit: ____ <!-- {{text:General.Teller.CashLimit,width=220,overlay}} -->  
-- Fiscal year start Jan 1? Yes ( ) <!-- {{radio:General.FiscalYearJan1,group=General.FiscalYearJan1,value=Yes,overlay}} -->  No ( ) <!-- {{radio:General.FiscalYearJan1,group=General.FiscalYearJan1,value=No,overlay}} -->  
-- If no, specify: ____ <!-- {{text:General.FiscalYearStart,width=200,overlay}} -->  
-
-**Transaction Identification:**
-- Bill Pay: ____ <!-- {{text:General.TxnId.BillPay,width=320,overlay}} -->  
-- Internet Banking Transfers: ____ <!-- {{text:General.TxnId.InternetTransfers,width=320,overlay}} -->  
-
-**Account Identification:**
-- Business Accounts: ____ <!-- {{text:General.AcctId.Business,width=360,overlay}} -->  
-- Public Fund Accounts: ____ <!-- {{text:General.AcctId.PublicFunds,width=360,overlay}} -->  
-- IOLTA Accounts: ____ <!-- {{text:General.AcctId.IOLTA,width=360,overlay}} -->  
-- Construction Loans: ____ <!-- {{text:General.AcctId.Construction,width=360,overlay}} -->  
-- Commercial LOCs: ____ <!-- {{text:General.AcctId.CommercialLOC,width=360,overlay}} -->  
-
-**Cold Storage:**
-- Large Cash Item report used for CTR filing: ____ <!-- {{text:General.CTR.LargeCashReport,width=420,overlay}} -->  
-- Cold Storage Reports File Path: ____ <!-- {{text:General.CTR.ColdStoragePath,width=420,overlay}} -->  
-
----
-
-## Wires
-
-- Wire processing/tracking method: ____ <!-- {{text:Wires.ProcessTracking,width=420,overlay}} -->  
-- Email for outgoing wire notifications: ____ <!-- {{text:Wires.NotificationEmail,width=320,overlay}} -->  
-- Default domestic wire fee: ____ <!-- {{text:Wires.DefaultDomesticFee,width=200,overlay}} -->  
-- Default international wire fee: ____ <!-- {{text:Wires.DefaultInternationalFee,width=200,overlay}} -->  
-- Require comments for wires without a fee? Yes ( ) <!-- {{radio:Wires.RequireCommentsNoFee,group=Wires.RequireCommentsNoFee,value=Yes,overlay}} -->  No ( ) <!-- {{radio:Wires.RequireCommentsNoFee,group=Wires.RequireCommentsNoFee,value=No,overlay}} -->  
-
----
-
-## Additional Requests
-
-**Items to be provided in addendum spreadsheet:**
-- [ ] <!-- {{check:Addendum.Employees,overlay}} --> All Employees with Job Titles, Birthdates, and Work Start Dates  
-- [ ] <!-- {{check:Addendum.Products,overlay}} --> All Loan/Deposit Products with Product Numbers and Descriptions  
-- [ ] <!-- {{check:Addendum.Branches,overlay}} --> All Branch Names and IDs  
-- [ ] <!-- {{check:Addendum.AccountStatuses,overlay}} --> All Account Statuses with Descriptions  
-- [ ] <!-- {{check:Addendum.Officers,overlay}} --> All Loan/Deposit Officers (including past employees tied to accounts)  
-- [ ] <!-- {{check:Addendum.Grades,overlay}} --> All Grades with Descriptions  
-- [ ] <!-- {{check:Addendum.PurposeCodes,overlay}} --> All Purpose Codes with Descriptions  
-- [ ] <!-- {{check:Addendum.TransactionCodes,overlay}} --> All Transaction Codes with Descriptions  
-- [ ] <!-- {{check:Addendum.AccountRelationshipCodes,overlay}} --> All Account Relationship Codes  
-
-**Separate attachments:**
-- [ ] <!-- {{check:Attachments.TimeDepositRateHistory,overlay}} --> Time Deposit Interest Rate History (Excel)  
-- [ ] <!-- {{check:Attachments.Logo,overlay}} --> Financial Institution Logo (JPG or PNG)  
-- [ ] <!-- {{check:Attachments.Letterhead,overlay}} --> Financial Institution Letterhead  
-- [ ] <!-- {{check:Attachments.FlexFormsCopies,overlay}} --> Copy of Forms for Flex Forms setup  
-- [ ] <!-- {{check:Attachments.OfficialChecksCopies,overlay}} --> Copy of Official Checks (blank & completed/voided)  
-- [ ] <!-- {{check:Attachments.OutgoingWireForm,overlay}} --> Copy of Outgoing Wire Form  
-- [ ] <!-- {{check:Attachments.IntranetWeblinks,overlay}} --> Weblinks for Intranet  
-
----
-
-## Technical Specifications
-
-### Server (Minimum Recommended)
-
-| Component  | Recommended                | Minimum |
-|------------|----------------------------|---------|
-| OS         | Windows Server 2022        | Windows Server 2016 |
-| SQL Server | SQL Server 2022 Standard   | SQL Server 2016 Standard |
-| Processor  | Intel Xeon 3GHz+, 12 vCPU   | Intel Xeon 3GHz+, 4 vCPU |
-| Memory     | 64 GB                       | 16 GB * |
-| HDD        | 1 TB                        | 300 GB * |
-
-\* Storage/memory may need to be increased based on asset size.
-
-**Note:** If DB is separate from the app server, allocate HDD space to SQL server.
-
-### Client Workstations
-
-- Microsoft Windows 10 or 11 (32/64 bit)  
-- .NET 4.8 Framework  
-- Microsoft Excel 2016 or later  
