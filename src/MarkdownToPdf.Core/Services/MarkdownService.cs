@@ -85,20 +85,23 @@ public class MarkdownService : IMarkdownService
 
         var genPages = genDoc.GetNumberOfPages();
         var bgPages = bgDoc?.GetNumberOfPages() ?? 0;
+        var formCopier = new iText.Forms.PdfPageFormCopier();
 
         for (int i = 1; i <= genPages; i++)
         {
-            var genPage = genDoc.GetPage(i);
-            var outPage = outDoc.AddNewPage(new iText.Kernel.Geom.PageSize(genPage.GetPageSize()));
-            var canvas = new iText.Kernel.Pdf.Canvas.PdfCanvas(outPage);
+            genDoc.CopyPagesTo(i, i, outDoc, formCopier);
+            var outPage = outDoc.GetPage(outDoc.GetNumberOfPages());
 
             if (bgPages > 0 && bgDoc is not null)
             {
                 int bgIndex = bgPages == 1 ? 1 : Math.Min(i, bgPages);
                 var bgPage = bgDoc.GetPage(bgIndex);
                 var bgSize = bgPage.GetPageSize();
-                var genSize = genPage.GetPageSize();
+                var genSize = outPage.GetPageSize();
                 var bgXObj = bgPage.CopyAsFormXObject(outDoc);
+
+                // Draw background beneath existing content
+                var canvas = new iText.Kernel.Pdf.Canvas.PdfCanvas(outPage.NewContentStreamBefore(), outPage.GetResources(), outDoc);
 
                 // Scale background to generated page size if needed
                 float scaleX = genSize.GetWidth() / bgSize.GetWidth();
@@ -115,10 +118,6 @@ public class MarkdownService : IMarkdownService
                     canvas.AddXObjectAt(bgXObj, 0, 0);
                 }
             }
-
-            var genXObj = genPage.CopyAsFormXObject(outDoc);
-            // Content was already offset via CSS margins; draw at (0,0)
-            canvas.AddXObjectAt(genXObj, 0, 0);
         }
 
         await outputStream.FlushAsync();
